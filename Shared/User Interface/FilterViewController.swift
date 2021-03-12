@@ -18,25 +18,20 @@ import os
     private lazy var logSliderMaxValuePower2Minus1 = Float(pow(2, logSliderMaxValue) - 1)
 
     @IBOutlet weak var controlsView: View!
-    @IBOutlet weak var depthValueLabel: Label!
     @IBOutlet weak var rateValueLabel: Label!
-    @IBOutlet weak var delayValueLabel: Label!
-    @IBOutlet weak var feedbackValueLabel: Label!
+    @IBOutlet weak var depthValueLabel: Label!
     @IBOutlet weak var dryMixValueLabel: Label!
     @IBOutlet weak var wetMixValueLabel: Label!
 
-    @IBOutlet weak var depthControl: Knob!
     @IBOutlet weak var rateControl: Knob!
-    @IBOutlet weak var delayControl: Knob!
-    @IBOutlet weak var feedbackControl: Knob!
+    @IBOutlet weak var depthControl: Knob!
+    @IBOutlet weak var squareWaveformSwitch: Switch!
     @IBOutlet weak var dryMixControl: Knob!
     @IBOutlet weak var wetMixControl: Knob!
 
     #if os(iOS)
-    @IBOutlet weak var depthTapEdit: UIView!
     @IBOutlet weak var rateTapEdit: UIView!
-    @IBOutlet weak var delayTapEdit: UIView!
-    @IBOutlet weak var feedbackTapEdit: UIView!
+    @IBOutlet weak var depthTapEdit: UIView!
     @IBOutlet weak var dryMixTapEdit: UIView!
     @IBOutlet weak var wetMixTapEdit: UIView!
 
@@ -46,7 +41,7 @@ import os
     @IBOutlet weak var editingBackground: UIView!
     #endif
 
-    var controls = [FilterParameterAddress : KnobController]()
+    var controls = [FilterParameterAddress : AUParameterControl]()
 
     public var audioUnit: FilterAudioUnit? {
         didSet {
@@ -82,10 +77,8 @@ import os
         editingBackground.layer.cornerRadius = 8.0
 
         editingView.isHidden = true
-        addTapGesture(depthTapEdit)
         addTapGesture(rateTapEdit)
-        addTapGesture(delayTapEdit)
-        addTapGesture(feedbackTapEdit)
+        addTapGesture(depthTapEdit)
         addTapGesture(dryMixTapEdit)
         addTapGesture(wetMixTapEdit)
 
@@ -97,12 +90,12 @@ import os
         self.viewConfig = viewConfig
     }
 
-    @IBAction public func depthChanged(_: Knob) { controls[.depth]?.controlChanged()}
-    @IBAction public func rateChanged(_: Knob) { controls[.rate]?.controlChanged() }
-    @IBAction public func delayChanged(_: Knob) { controls[.delay]?.controlChanged() }
-    @IBAction public func feedbackChanged(_: Knob) { controls[.feedback]?.controlChanged() }
-    @IBAction public func dryMixChanged(_: Knob) { controls[.dryMix]?.controlChanged() }
-    @IBAction public func wetMixChanged(_: Knob) { controls[.wetMix]?.controlChanged() }
+    @IBAction public func knobChanged(control: Knob) {
+        guard let address = FilterParameterAddress(rawValue: UInt64(control.tag)) else { return }
+        controls[address]?.controlChanged()
+    }
+
+    @IBAction public func squareWaveChanged(control: Switch) { controls[.squareWave]?.controlChanged() }
 
     #if os(macOS)
     override public func mouseDown(with event: NSEvent) {
@@ -150,18 +143,14 @@ extension FilterViewController {
         self.parameterObserverToken = parameterObserverToken
 
         let params = audioUnit.parameterDefinitions
-        controls[.depth] = KnobController(parameterObserverToken: parameterObserverToken, parameter: params[.depth],
-                                          formatter: params.valueFormatter(.depth), knob: depthControl,
-                                          label: depthValueLabel, logValues: false)
         controls[.rate] = KnobController(parameterObserverToken: parameterObserverToken, parameter: params[.rate],
                                          formatter: params.valueFormatter(.rate), knob: rateControl,
                                          label: rateValueLabel, logValues: true)
-        controls[.delay] = KnobController(parameterObserverToken: parameterObserverToken, parameter: params[.delay],
-                                          formatter: params.valueFormatter(.delay), knob: delayControl,
-                                          label: delayValueLabel, logValues: true)
-        controls[.feedback] = KnobController(parameterObserverToken: parameterObserverToken,
-                                             parameter: params[.feedback], formatter: params.valueFormatter(.feedback),
-                                             knob: feedbackControl, label: feedbackValueLabel, logValues: false)
+        controls[.depth] = KnobController(parameterObserverToken: parameterObserverToken, parameter: params[.depth],
+                                          formatter: params.valueFormatter(.depth), knob: depthControl,
+                                          label: depthValueLabel, logValues: false)
+        controls[.squareWave] = SwitchController(parameterObserverToken: parameterObserverToken, parameter: params[.squareWave],
+                                                 control: squareWaveformSwitch)
         controls[.dryMix] = KnobController(parameterObserverToken: parameterObserverToken, parameter: params[.dryMix],
                                            formatter: params.valueFormatter(.dryMix), knob: dryMixControl,
                                            label: dryMixValueLabel, logValues: false)

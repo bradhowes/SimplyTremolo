@@ -5,7 +5,7 @@
 #include <cmath>
 #include "DSP.h"
 
-enum class LFOWaveform { sinusoid, triangle, sawtooth };
+enum class LFOWaveform { sinusoid, triangle, sawtooth, square };
 
 /**
  Implementation of a low-frequency oscillator. Can generate:
@@ -13,6 +13,7 @@ enum class LFOWaveform { sinusoid, triangle, sawtooth };
  - sinusoid
  - triangle
  - sawtooth
+ - square (50% duty-cycle)
 
  Loosely based on code found in "Designing Audio Effect Plugins in C++" by Will C. Pirkle (2019)
  */
@@ -138,6 +139,7 @@ private:
             case LFOWaveform::sinusoid: return sineValue;
             case LFOWaveform::sawtooth: return sawtoothValue;
             case LFOWaveform::triangle: return triangleValue;
+            case LFOWaveform::square: return squareValue;
         }
     }
 
@@ -151,6 +153,7 @@ private:
     static T sineValue(T counter) { return DSP::parabolicSine(M_PI - counter * 2.0 * M_PI); }
     static T sawtoothValue(T counter) { return DSP::unipolarToBipolar(counter); }
     static T triangleValue(T counter) { return DSP::unipolarToBipolar(std::abs(DSP::unipolarToBipolar(counter))); }
+    static T squareValue(T counter) { return DSP::unipolarToBipolar(counter) > 0.0 ? 1.0 : -1.0; }
 
     T sampleRate_;
     T frequency_;

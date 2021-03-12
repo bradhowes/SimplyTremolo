@@ -7,7 +7,7 @@ extension AUParameterTree {
         parameter(withAddress: address.rawValue)
     }
 
-    public class func createParameter(withIdentifier identifier: String, name: String, address: FilterParameterAddress,
+    public class func createParameter(_ identifier: String, name: String, address: FilterParameterAddress,
                                       min: AUValue, max: AUValue, unit: AudioUnitParameterUnit, unitName: String? = nil,
                                       flags: AudioUnitParameterOptions = [.flag_IsReadable, .flag_IsWritable],
                                       valueStrings: [String]? = nil, dependentParameters: [NSNumber]? = nil) -> AUParameter {

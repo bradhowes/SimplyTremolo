@@ -9,9 +9,10 @@ import os
 @objc public enum FilterParameterAddress: UInt64, CaseIterable {
     case rate = 0
     case depth
-    case squareWave
     case dryMix
     case wetMix
+    case squareWave
+    case odd90
 }
 
 private extension Array where Element == AUParameter {
@@ -28,11 +29,12 @@ public final class AudioUnitParameters: NSObject {
     static public let maxDelayMilliseconds: AUValue = 15.0
 
     public let parameters: [AUParameter] = [
-        AUParameterTree.createParameter("rate", name: "Rate", address: .rate, min: 0.01, max: 10.0, unit: .hertz),
+        AUParameterTree.createParameter("rate", name: "Rate", address: .rate, min: 0.01, max: 20.0, unit: .hertz),
         AUParameterTree.createParameter("depth", name: "Depth", address: .depth, min: 0.0, max: 100.0, unit: .percent),
-        AUParameterTree.createParameter("squareWave", name: "SquareWave", address: .squareWave, min: 0.0, max: 1.0, unit: .boolean),
         AUParameterTree.createParameter("dry", name: "Dry", address: .dryMix, min: 0.0, max: 100.0, unit: .percent),
-        AUParameterTree.createParameter("wet", name: "Wet", address: .wetMix, min: 0.0, max: 100.0, unit: .percent)
+        AUParameterTree.createParameter("wet", name: "Wet", address: .wetMix, min: 0.0, max: 100.0, unit: .percent),
+        AUParameterTree.createParameter("squareWave", name: "SquareWave", address: .squareWave, min: 0.0, max: 1.0, unit: .boolean),
+        AUParameterTree.createParameter("odd90", name: "Odd 90°", address: .odd90, min: 0.0, max: 1.0, unit: .boolean)
     ]
 
     /// AUParameterTree created with the parameter definitions for the audio unit
@@ -40,9 +42,10 @@ public final class AudioUnitParameters: NSObject {
 
     public var rate: AUParameter { parameters[.rate] }
     public var depth: AUParameter { parameters[.depth] }
-    public var squareWave: AUParameter { parameters[.squareWave] }
     public var dryMix: AUParameter { parameters[.dryMix] }
     public var wetMix: AUParameter { parameters[.wetMix] }
+    public var squareWave: AUParameter { parameters[.squareWave] }
+    public var odd90: AUParameter { parameters[.odd90] }
 
     /**
      Create a new AUParameterTree for the defined filter parameters.
@@ -99,11 +102,12 @@ extension AudioUnitParameters {
      AudioUnit.
      */
     public func setValues(_ preset: FilterPreset) {
-        self.rate.value = preset.rate
-        self.depth.value = preset.depth
-        self.squareWave.value = preset.squareWave
-        self.dryMix.value = preset.dryMix
-        self.wetMix.value = preset.wetMix
+        rate.value = preset.rate
+        depth.value = preset.depth
+        dryMix.value = preset.dryMix
+        wetMix.value = preset.wetMix
+        squareWave.value = preset.squareWave
+        odd90.value = preset.odd90
     }
 }
 
@@ -112,7 +116,7 @@ extension AudioUnitParameters {
         switch address {
         case .rate: return "%.2f"
         case .depth: return "%.2f"
-        case .squareWave: return "%.0f"
+        case .squareWave, .odd90: return "%.0f"
         case .dryMix, .wetMix: return "%.0f"
         default: return "?"
         }

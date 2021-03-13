@@ -12,7 +12,10 @@ import os
  Visual representation of the knob is done via CoreAnimation components, namely CAShapeLayer and UIBezierPath. The diameter of the arc of the knob is
  defined by the min(width, height) of the view's frame.
  */
+@IBDesignable
 open class Knob: NSControl {
+
+    open override var acceptsFirstResponder: Bool { true }
 
     /// The minimum value reported by the control.
     open var minimumValue: Float = 0.0 { didSet { setValue(clampedValue(value), animated: false) } }
@@ -36,13 +39,13 @@ open class Knob: NSControl {
     open var progressLineWidth: CGFloat = 4 { didSet { progressLayer.lineWidth = progressLineWidth } }
 
     /// The color of the arc from the start up to the current value.
-    open var progressColor: Color = .systemOrange { didSet { progressLayer.strokeColor = progressColor.cgColor } }
+    open var progressColor: Color = Color(named: "Progress")! { didSet { progressLayer.strokeColor = progressColor.cgColor } }
 
     /// The width of the radial line drawn from the current value on the arc towards the arc center.
     open var indicatorLineWidth: CGFloat = 4 { didSet { indicatorLayer.lineWidth = indicatorLineWidth } }
 
     /// The color of the radial line drawn from the current value on the arc towards the arc center.
-    open var indicatorColor: Color = .systemOrange { didSet { indicatorLayer.strokeColor = indicatorColor.cgColor } }
+    open var indicatorColor: Color = Color(named: "Progress")! { didSet { indicatorLayer.strokeColor = progressColor.cgColor } }
 
     /// The proportion of the radial line drawn from the current value on the arc towards the arc center.
     /// Range is from 0.0 to 1.0, where 1.0 will draw a complete line, and anything less will draw that fraction of it
@@ -76,7 +79,6 @@ open class Knob: NSControl {
     private var panOrigin: CGPoint = .zero
     private var activeTouch: Bool = false
 
-    override public var acceptsFirstResponder: Bool { get { return true } }
     var backingLayer: CALayer { layer! }
     override public var wantsUpdateLayer: Bool { true }
     override public var isFlipped: Bool { true }

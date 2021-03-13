@@ -12,7 +12,7 @@ import os
  Visual representation of the knob is done via CoreAnimation components, namely CAShapeLayer and UIBezierPath. The diameter of the arc of the knob is
  defined by the min(width, height) of the view's frame. The start and end of the arc is controlled by the `startAngle` and `endAngle` settings.
  */
-open class Knob: UIControl {
+@objc open class Knob: UIControl {
 
     /// The minimum value reported by the control.
     open var minimumValue: Float = 0.0 { didSet { setValue(clampedValue(value), animated: false) } }
@@ -36,13 +36,13 @@ open class Knob: UIControl {
     open var progressLineWidth: CGFloat = 4 { didSet { progressLayer.lineWidth = progressLineWidth } }
 
     /// The color of the arc from the start up to the current value.
-    open var progressColor: UIColor = .systemOrange { didSet { progressLayer.strokeColor = progressColor.cgColor } }
+    open var progressColor: UIColor = Color(named: "Progress")! { didSet { progressLayer.strokeColor = progressColor.cgColor } }
 
     /// The width of the radial line drawn from the current value on the arc towards the arc center.
     open var indicatorLineWidth: CGFloat = 2 { didSet { indicatorLayer.lineWidth = indicatorLineWidth } }
 
     /// The color of the radial line drawn from the current value on the arc towards the arc center.
-    open var indicatorColor: UIColor = .systemOrange { didSet { indicatorLayer.strokeColor = indicatorColor.cgColor } }
+    open var indicatorColor: UIColor = Color(named: "Progress")! { didSet { indicatorLayer.strokeColor = indicatorColor.cgColor } }
 
     /// The proportion of the radial line drawn from the current value on the arc towards the arc center.
     /// Range is from 0.0 to 1.0, where 1.0 will draw a complete line, and anything less will draw that fraction of it

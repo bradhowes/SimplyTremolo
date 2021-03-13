@@ -50,10 +50,6 @@ public:
                 os_log_with_type(log_, OS_LOG_TYPE_INFO, "depth - %f", tmp);
                 depth_ = tmp;
                 break;
-            case FilterParameterAddressSquareWave:
-                squareWave_ = value > 0.0 ? true : false;
-                os_log_with_type(log_, OS_LOG_TYPE_INFO, "squareWave: %d", squareWave_);
-                break;
             case FilterParameterAddressDryMix:
                 tmp = value / 100.0;
                 if (tmp == dryMix_) return;
@@ -66,6 +62,14 @@ public:
                 os_log_with_type(log_, OS_LOG_TYPE_INFO, "wetMix - %f", tmp);
                 wetMix_ = tmp;
                 break;
+            case FilterParameterAddressSquareWave:
+                squareWave_ = value > 0.0 ? true : false;
+                os_log_with_type(log_, OS_LOG_TYPE_INFO, "squareWave: %d", squareWave_);
+                break;
+            case FilterParameterAddressOdd90:
+                odd90_ = value > 0.0 ? true : false;
+                os_log_with_type(log_, OS_LOG_TYPE_INFO, "odd90: %d", odd90_);
+                break;
         }
     }
 
@@ -73,9 +77,10 @@ public:
         switch (address) {
             case FilterParameterAddressRate: return rate_;
             case FilterParameterAddressDepth: return depth_ * 200.0; // !!!
-            case FilterParameterAddressSquareWave: return squareWave_ * 1.0;
             case FilterParameterAddressDryMix: return dryMix_ * 100.0;
             case FilterParameterAddressWetMix: return wetMix_ * 100.0;
+            case FilterParameterAddressSquareWave: return squareWave_ * 1.0;
+            case FilterParameterAddressOdd90: return odd90_ * 1.0;
         }
         return 0.0;
     }
@@ -92,7 +97,8 @@ private:
             if (channel > 0) lfo_.restoreState(lfoState);
             for (int frame = 0; frame < frameCount; ++frame) {
                 auto inputSample = inputs[frame];
-                auto modulation = lfo_.valueAndIncrement();
+                auto modulation = (odd90_ && (channel & 1)) ? lfo_.quadPhaseValue() : lfo_.value();
+                lfo_.increment();
                 auto outputSample = (modulation + 1) * depth_ * inputSample;
                 outputs[frame] = dryMix_ * inputSample + wetMix_ * outputSample;
             }
@@ -103,8 +109,9 @@ private:
 
     double rate_;
     double depth_;
-    bool squareWave_;
     double dryMix_;
     double wetMix_;
+    bool squareWave_;
+    bool odd90_;
     LFO<double> lfo_;
 };

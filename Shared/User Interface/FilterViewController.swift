@@ -18,16 +18,21 @@ import os
     private lazy var logSliderMaxValuePower2Minus1 = Float(pow(2, logSliderMaxValue) - 1)
 
     @IBOutlet weak var controlsView: View!
-    @IBOutlet weak var rateValueLabel: Label!
-    @IBOutlet weak var depthValueLabel: Label!
-    @IBOutlet weak var dryMixValueLabel: Label!
-    @IBOutlet weak var wetMixValueLabel: Label!
 
     @IBOutlet weak var rateControl: Knob!
+    @IBOutlet weak var rateValueLabel: Label!
+
     @IBOutlet weak var depthControl: Knob!
-    @IBOutlet weak var squareWaveformSwitch: Switch!
+    @IBOutlet weak var depthValueLabel: Label!
+
     @IBOutlet weak var dryMixControl: Knob!
+    @IBOutlet weak var dryMixValueLabel: Label!
+
     @IBOutlet weak var wetMixControl: Knob!
+    @IBOutlet weak var wetMixValueLabel: Label!
+
+    @IBOutlet weak var squareWaveformSwitch: Switch!
+    @IBOutlet weak var odd90Switch: Switch!
 
     #if os(iOS)
     @IBOutlet weak var rateTapEdit: UIView!
@@ -56,17 +61,20 @@ import os
     #if os(macOS)
 
     public override init(nibName: NSNib.Name?, bundle: Bundle?) {
+        os_log(.info, log: log, "init(nibName:bundle)")
         super.init(nibName: nibName, bundle: Bundle(for: type(of: self)))
     }
 
     #endif
 
     required init?(coder: NSCoder) {
+        os_log(.info, log: log, "init(coder)")
         super.init(coder: coder)
     }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
+        os_log(.info, log: log, "viewDidLoad")
         view.backgroundColor = .black
         if audioUnit != nil {
             connectViewToAU()
@@ -75,14 +83,25 @@ import os
         #if os(iOS)
 
         editingBackground.layer.cornerRadius = 8.0
-
         editingView.isHidden = true
-        addTapGesture(rateTapEdit)
-        addTapGesture(depthTapEdit)
-        addTapGesture(dryMixTapEdit)
-        addTapGesture(wetMixTapEdit)
+
+        for view in [rateTapEdit, depthTapEdit, dryMixTapEdit, wetMixTapEdit] {
+            addTapGesture(view!)
+        }
 
         #endif
+
+        for knob in [rateControl, depthControl] {
+            knob!.trackLineWidth = 10
+            knob!.progressLineWidth = 8
+            knob!.indicatorLineWidth = 8
+        }
+
+        for knob in [dryMixControl, wetMixControl] {
+            knob!.trackLineWidth = 8;
+            knob!.progressLineWidth = 6;
+            knob!.indicatorLineWidth = 6;
+        }
     }
 
     public func selectViewConfiguration(_ viewConfig: AUAudioUnitViewConfiguration) {
@@ -90,12 +109,25 @@ import os
         self.viewConfig = viewConfig
     }
 
-    @IBAction public func knobChanged(control: Knob) {
-        guard let address = FilterParameterAddress(rawValue: UInt64(control.tag)) else { return }
-        controls[address]?.controlChanged()
+    @IBAction public func rateChanged(control: Knob) {
+        controls[.rate]?.controlChanged()
+    }
+
+    @IBAction public func depthChanged(control: Knob) {
+        controls[.depth]?.controlChanged()
+    }
+
+    @IBAction public func dryChanged(control: Knob) {
+        controls[.dryMix]?.controlChanged()
+    }
+
+    @IBAction public func wetChanged(control: Knob) {
+        controls[.wetMix]?.controlChanged()
     }
 
     @IBAction public func squareWaveChanged(control: Switch) { controls[.squareWave]?.controlChanged() }
+
+    @IBAction public func odd90Changed(control: Switch) { controls[.squareWave]?.controlChanged() }
 
     #if os(macOS)
     override public func mouseDown(with event: NSEvent) {

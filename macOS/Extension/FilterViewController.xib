@@ -14,7 +14,7 @@
                 <outlet property="depthValueLabel" destination="YuF-pJ-Rk3" id="HSi-eR-FjA"/>
                 <outlet property="dryMixControl" destination="oTi-Ii-NHh" id="cla-Ev-Yts"/>
                 <outlet property="dryMixValueLabel" destination="k3X-9K-MVH" id="hDe-Hq-k1a"/>
-                <outlet property="odd90Switch" destination="ti9-fX-fln" id="a5f-oU-8lp"/>
+                <outlet property="odd90Switch" destination="jyv-e6-r9o" id="RMs-nM-jWn"/>
                 <outlet property="rateControl" destination="vJE-Qk-G6z" id="rkx-pf-Ho4"/>
                 <outlet property="rateValueLabel" destination="FNZ-OF-PRt" id="8Xq-5l-ltZ"/>
                 <outlet property="squareWaveformSwitch" destination="hS6-fo-BBE" id="sin-97-vSy"/>
@@ -298,7 +298,7 @@
             <color red="0.69800001382827759" green="0.47999998927116394" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="Title">
-            <color red="0.41999998688697815" green="0.0" blue="1" alpha="0.30000001192092896" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.41999998688697815" green="0.0" blue="1" alpha="0.34999999403953552" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

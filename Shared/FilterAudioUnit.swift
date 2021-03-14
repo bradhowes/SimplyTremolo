@@ -123,11 +123,7 @@ public final class FilterAudioUnit: AUAudioUnit {
     private let kernel = SimplyTremoloKernelAdapter(Bundle.main.auBaseName,
                                              maxDelayMilliseconds: AudioUnitParameters.maxDelayMilliseconds)
 
-    private let factoryPresetValues:[(name: String, preset: FilterPreset)] = [
-        ("Flangie", FilterPreset(rate: 0.14, depth: 100, dryMix: 50, wetMix: 50, squareWave: 0.0, odd90: 1.0)),
-        ("Sweeper", FilterPreset(rate: 0.14, depth: 100, dryMix: 50, wetMix: 50, squareWave: 1.0, odd90: 0.0)),
-        ("Lord Tremolo", FilterPreset(rate: 8.6, depth: 100, dryMix: 0, wetMix: 100, squareWave: 1.0, odd90: 1.0))
-    ]
+    private lazy var factoryPresetValues = parameterDefinitions.factoryPresets
 
     private var _currentPreset: AUAudioUnitPreset? {
         didSet { os_log(.debug, log: log, "* _currentPreset name: %{public}s", _currentPreset.descriptionOrNil) }

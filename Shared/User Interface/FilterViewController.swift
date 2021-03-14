@@ -127,7 +127,7 @@ import os
 
     @IBAction public func squareWaveChanged(control: Switch) { controls[.squareWave]?.controlChanged() }
 
-    @IBAction public func odd90Changed(control: Switch) { controls[.squareWave]?.controlChanged() }
+    @IBAction public func odd90Changed(control: Switch) { controls[.odd90]?.controlChanged() }
 
     #if os(macOS)
     override public func mouseDown(with event: NSEvent) {
@@ -177,18 +177,20 @@ extension FilterViewController {
         let params = audioUnit.parameterDefinitions
         controls[.rate] = KnobController(parameterObserverToken: parameterObserverToken, parameter: params[.rate],
                                          formatter: params.valueFormatter(.rate), knob: rateControl,
-                                         label: rateValueLabel, logValues: true)
+                                         label: rateValueLabel, logValues: false)
         controls[.depth] = KnobController(parameterObserverToken: parameterObserverToken, parameter: params[.depth],
                                           formatter: params.valueFormatter(.depth), knob: depthControl,
                                           label: depthValueLabel, logValues: false)
-        controls[.squareWave] = SwitchController(parameterObserverToken: parameterObserverToken, parameter: params[.squareWave],
-                                                 control: squareWaveformSwitch)
         controls[.dryMix] = KnobController(parameterObserverToken: parameterObserverToken, parameter: params[.dryMix],
                                            formatter: params.valueFormatter(.dryMix), knob: dryMixControl,
                                            label: dryMixValueLabel, logValues: false)
         controls[.wetMix] = KnobController(parameterObserverToken: parameterObserverToken, parameter: params[.wetMix],
                                            formatter: params.valueFormatter(.wetMix), knob: wetMixControl,
                                            label:  wetMixValueLabel, logValues: false)
+        controls[.squareWave] = SwitchController(parameterObserverToken: parameterObserverToken, parameter: params[.squareWave],
+                                                 control: squareWaveformSwitch)
+        controls[.odd90] = SwitchController(parameterObserverToken: parameterObserverToken, parameter: params[.odd90],
+                                                 control: odd90Switch)
     }
 
     private func updateDisplay() {

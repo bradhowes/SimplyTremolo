@@ -3,7 +3,10 @@
 #pragma once
 
 #import <string>
+#import <vector>
+
 #import <AVFoundation/AVFoundation.h>
+#import <Accelerate/Accelerate.h>
 
 #import "DelayBuffer.h"
 #import "SimplyTremoloFramework/SimplyTremoloFramework-Swift.h"
@@ -16,7 +19,7 @@ public:
     friend super;
 
     SimplyTremoloKernel(const std::string& name)
-    : super(os_log_create(name.c_str(), "SimplyTremoloKernel")), lfo_()
+    : super(os_log_create(name.c_str(), "SimplyTremoloKernel")), lfo_(), scratchBuffer_{}
     {
         lfo_.setWaveform(LFOWaveform::sinusoid);
     }
@@ -26,17 +29,14 @@ public:
      */
     void startProcessing(AVAudioFormat* format, AUAudioFrameCount maxFramesToRender) {
         super::startProcessing(format, maxFramesToRender);
-        initialize(format.channelCount, format.sampleRate);
-    }
-
-    void initialize(int channelCount, double sampleRate) {
-        lfo_.initialize(sampleRate, rate_);
+        initialize(format.channelCount, format.sampleRate, maxFramesToRender);
     }
 
     void stopProcessing() { super::stopProcessing(); }
 
     void setParameterValue(AUParameterAddress address, AUValue value) {
-        double tmp;
+        AUValue tmp;
+        bool tmpBool;
         switch (address) {
             case FilterParameterAddressRate:
                 if (value == rate_) return;
@@ -45,7 +45,7 @@ public:
                 lfo_.setFrequency(rate_);
                 break;
             case FilterParameterAddressDepth:
-                tmp = value / 200.0; // !!!
+                tmp = value / 200.0; // Divide by factor of 2.0 now so we don't have to when we apply the modulation
                 if (tmp == depth_) return;
                 os_log_with_type(log_, OS_LOG_TYPE_INFO, "depth - %f", tmp);
                 depth_ = tmp;
@@ -63,8 +63,12 @@ public:
                 wetMix_ = tmp;
                 break;
             case FilterParameterAddressSquareWave:
-                squareWave_ = value > 0.0 ? true : false;
-                os_log_with_type(log_, OS_LOG_TYPE_INFO, "squareWave: %d", squareWave_);
+                tmpBool = value > 0.0 ? true : false;
+                if (tmpBool != squareWave_) {
+                    squareWave_ = tmpBool;
+                    os_log_with_type(log_, OS_LOG_TYPE_INFO, "squareWave: %d", squareWave_);
+                    lfo_.setWaveform(squareWave_ ? LFOWaveform::square : LFOWaveform::sinusoid);
+                }
                 break;
             case FilterParameterAddressOdd90:
                 odd90_ = value > 0.0 ? true : false;
@@ -87,7 +91,18 @@ public:
 
 private:
 
-    void doParameterEvent(const AUParameterEvent& event) { setParameterValue(event.parameterAddress, event.value); }
+    void generateModulations(AUAudioFrameCount frameCount, std::function<AUValue()> generator) {
+
+        // LFO ranges from [-1.0, +1] (bipolar) so convert to unipolar (/ 2 already taken care of in depth_ setting)
+        // Result then ranges from [0, 1], but if depth_ is set to zero, we want all dry signal. So, swap range to
+        // [1.0, 0].
+        //
+        // NOTE: we have a strong guarantee from CoreAudio that frameCount <= scratchBuffer_.size(), so treat as an
+        // array.
+        for (auto index = 0; index < frameCount; ++index) {
+            scratchBuffer_[index] = 1.0 - (generator() + 1.0) * depth_;
+        }
+    }
 
     void doRendering(std::vector<AUValue const*> ins, std::vector<AUValue*> outs, AUAudioFrameCount frameCount) {
         auto lfoState = lfo_.saveState();
@@ -95,23 +110,46 @@ private:
             auto& inputs = ins[channel];
             auto& outputs = outs[channel];
             if (channel > 0) lfo_.restoreState(lfoState);
-            for (int frame = 0; frame < frameCount; ++frame) {
-                auto inputSample = inputs[frame];
-                auto modulation = (odd90_ && (channel & 1)) ? lfo_.quadPhaseValue() : lfo_.value();
-                lfo_.increment();
-                auto outputSample = (modulation + 1) * depth_ * inputSample;
-                outputs[frame] = dryMix_ * inputSample + wetMix_ * outputSample;
+
+            // Generate modulations to apply to input samples.
+            if (odd90_ && (channel & 1)) {
+                generateModulations(frameCount, [this]{ return lfo_.quadPhaseValue();});
             }
+            else {
+                generateModulations(frameCount, [this]{ return lfo_.value();});
+            }
+
+            auto stride = vDSP_Stride(1);
+
+            // Apply modulation to input samples - scratchBuffer_ *= inputs
+            vDSP_vmul(scratchBuffer_.data(), stride,
+                      inputs, stride,
+                      scratchBuffer_.data(), stride,
+                      vDSP_Length(frameCount));
+
+            // Generate outputs - outputs = inputs * dryMix + scratchBuffer_ * wetMix
+            vDSP_vsmsma(inputs, stride, &dryMix_,
+                        scratchBuffer_.data(), stride, &wetMix_,
+                        outputs, stride,
+                        vDSP_Length(frameCount));
         }
     }
 
+    void initialize(int channelCount, double sampleRate, AUAudioFrameCount maxFramesToRender) {
+        lfo_.initialize(sampleRate, rate_);
+        scratchBuffer_.resize(maxFramesToRender, 0.0);
+    }
+
+    void doParameterEvent(const AUParameterEvent& event) { setParameterValue(event.parameterAddress, event.value); }
+
     void doMIDIEvent(const AUMIDIEvent& midiEvent) {}
 
-    double rate_;
-    double depth_;
-    double dryMix_;
-    double wetMix_;
+    AUValue rate_;
+    AUValue depth_;
+    AUValue dryMix_;
+    AUValue wetMix_;
     bool squareWave_;
     bool odd90_;
-    LFO<double> lfo_;
+    LFO<AUValue> lfo_;
+    std::vector<AUValue> scratchBuffer_;
 };

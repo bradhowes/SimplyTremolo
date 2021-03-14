@@ -77,7 +77,7 @@ public:
      */
     void reset() {
         phaseIncrement_ = frequency_ / sampleRate_;
-        moduloCounter_ = phaseIncrement_ > 0 ? 0.0 : 1.0;
+        restoreState(phaseIncrement_ > 0 ? 0.0 : 1.0);
     }
 
     /**
@@ -98,40 +98,50 @@ public:
     }
 
     /**
-     Increment the oscillator to the next value.
-     */
-    void increment() {
-        moduloCounter_ = incrementModuloCounter(moduloCounter_, phaseIncrement_);
-        quadPhaseCounter_ = incrementModuloCounter(moduloCounter_, 0.25);
-    }
-
-    /**
-     Obtain the next value of the oscillator. Advances counter before returning, so this is not idempotent.
-
-     @returns current waveform value
-     */
-    T valueAndIncrement() {
-        auto counter = moduloCounter_;
-        quadPhaseCounter_ = incrementModuloCounter(counter, 0.25);
-        moduloCounter_ = incrementModuloCounter(counter, phaseIncrement_);
-        return valueGenerator_(counter);
-    }
-
-    /**
      Obtain the current value of the oscillator.
 
      @returns current waveform value
      */
-    T value() { return valueGenerator_(moduloCounter_); }
+    T value() {
+        T value = valueGenerator_(moduloCounter_);
+        increment();
+        return value;
+    }
+
+    template <typename U>
+    void fillWithValues(std::vector<U>& destination, T offset, T scale) {
+        for (auto index = 0; index < destination.size(); ++index) {
+            destination[index] = (valueGenerator_(moduloCounter_) + offset) * scale;
+            increment();
+        }
+    }
 
     /**
      Obtain the current value of the oscillator that is 90° advanced from what `value()` would return.
 
      @returns current 90° advanced waveform value
      */
-    T quadPhaseValue() const { return valueGenerator_(quadPhaseCounter_); }
+    T quadPhaseValue() {
+        T value = valueGenerator_(quadPhaseCounter_);
+        increment();
+        return value;
+    }
+
+    template <typename U>
+    void fillWithQuadPhaseValues(std::vector<U>& destination, T offset, T scale) {
+        for (auto index = 0; index < destination.size(); ++index) {
+            destination[index] = (valueGenerator_(quadPhaseCounter_) + offset) * scale;
+            increment();
+        }
+    }
 
 private:
+
+    void increment() {
+        moduloCounter_ = incrementModuloCounter(moduloCounter_, phaseIncrement_);
+        quadPhaseCounter_ = incrementModuloCounter(moduloCounter_, 0.25);
+    }
+
     using ValueGenerator = std::function<T(T)>;
 
     static ValueGenerator WaveformGenerator(LFOWaveform waveform) {
@@ -159,6 +169,6 @@ private:
     T frequency_;
     std::function<T(T)> valueGenerator_;
     T moduloCounter_ = {0.0};
-    T quadPhaseCounter_ = {0.0};
+    T quadPhaseCounter_ = {0.25};
     T phaseIncrement_;
 };

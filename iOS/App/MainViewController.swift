@@ -111,5 +111,18 @@ extension MainViewController {
         addChild(viewController)
         view.setNeedsLayout()
         containerView.setNeedsLayout()
+
+        guard let audioUnit = viewController.audioUnit else { fatalError("no audioUnit") }
+        let goal = audioUnit.factoryPresets.count
+        var count = presetSelection.numberOfSegments
+        while count > goal {
+            count -= 1
+            presetSelection.removeSegment(at: count, animated: false)
+        }
+
+        while count < goal {
+            count += 1
+            presetSelection.insertSegment(withTitle: "\(count)", at: count, animated: false)
+        }
     }
 }

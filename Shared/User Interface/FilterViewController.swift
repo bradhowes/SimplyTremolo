@@ -41,9 +41,9 @@ import os
     @IBOutlet weak var wetMixTapEdit: UIView!
 
     @IBOutlet weak var editingView: View!
+    @IBOutlet weak var editingBoxView: UIView!
     @IBOutlet weak var editingLabel: Label!
     @IBOutlet weak var editingValue: UITextField!
-    @IBOutlet weak var editingBackground: UIView!
     #endif
 
     var controls = [FilterParameterAddress : AUParameterControl]()
@@ -82,7 +82,7 @@ import os
 
         #if os(iOS)
 
-        editingBackground.layer.cornerRadius = 8.0
+        editingBoxView.layer.cornerRadius = 8.0
         editingView.isHidden = true
 
         for view in [rateTapEdit, depthTapEdit, dryMixTapEdit, wetMixTapEdit] {

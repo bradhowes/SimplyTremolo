@@ -24,53 +24,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tremolo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Nj-pL-t9n">
-                                <rect key="frame" x="120" y="117.5" width="427" height="140"/>
+                                <rect key="frame" x="98.5" y="118.5" width="470.5" height="138"/>
                                 <fontDescription key="fontDescription" name="Desdemona" family="Desdemona" pointSize="120"/>
                                 <color key="textColor" name="Title"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uNx-0G-OWZ" userLabel="Editor">
-                                <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="gry-aw-80i" userLabel="Value Editor">
-                                        <rect key="frame" x="212.5" y="20" width="242" height="66"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gm-sU-zom">
-                                                <rect key="frame" x="16" y="23" width="41.5" height="20.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" name="Labels"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="100.00" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="5xm-4x-x9O">
-                                                <rect key="frame" x="66" y="16" width="160" height="34"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="160" id="dPh-GW-1UK"/>
-                                                </constraints>
-                                                <color key="textColor" red="0.40116951080000002" green="1" blue="0.99500974590000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" keyboardAppearance="alert" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
-                                            </textField>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                        <constraints>
-                                            <constraint firstItem="5xm-4x-x9O" firstAttribute="leading" secondItem="0gm-sU-zom" secondAttribute="trailing" constant="8.5" id="36j-4e-YyK"/>
-                                            <constraint firstAttribute="trailing" secondItem="5xm-4x-x9O" secondAttribute="trailing" constant="16" id="Qcx-iE-s5p"/>
-                                            <constraint firstItem="0gm-sU-zom" firstAttribute="firstBaseline" secondItem="5xm-4x-x9O" secondAttribute="firstBaseline" id="RPh-ee-zfb"/>
-                                            <constraint firstAttribute="bottom" secondItem="5xm-4x-x9O" secondAttribute="bottom" constant="16" id="cmP-9m-IdQ"/>
-                                            <constraint firstItem="5xm-4x-x9O" firstAttribute="top" secondItem="gry-aw-80i" secondAttribute="top" constant="16" id="gBA-8n-gHn"/>
-                                            <constraint firstItem="0gm-sU-zom" firstAttribute="leading" secondItem="gry-aw-80i" secondAttribute="leading" constant="16" id="wt2-jK-nEr"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.045474425056912252" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <gestureRecognizers/>
-                                <constraints>
-                                    <constraint firstItem="gry-aw-80i" firstAttribute="centerX" secondItem="uNx-0G-OWZ" secondAttribute="centerX" id="U5P-bv-jpS"/>
-                                    <constraint firstItem="gry-aw-80i" firstAttribute="top" secondItem="uNx-0G-OWZ" secondAttribute="top" constant="20" symbolic="YES" id="rfc-aW-xqN"/>
-                                </constraints>
-                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v1.0.0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pb8-H3-AaS" userLabel="APP_VERSION">
-                                <rect key="frame" x="507.5" y="239.5" width="39.5" height="18"/>
+                                <rect key="frame" x="529.5" y="238.5" width="39.5" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" name="Title"/>
                                 <nil key="highlightedColor"/>
@@ -204,7 +164,7 @@
                                                         <color key="textColor" name="Labels"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rYA-kZ-hpS" userLabel="Dry Tap">
+                                                    <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rYA-kZ-hpS" userLabel="Dry Tap">
                                                         <rect key="frame" x="0.0" y="72" width="80" height="22"/>
                                                     </view>
                                                 </subviews>
@@ -243,7 +203,7 @@
                                                         <color key="textColor" name="Labels"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <view tag="4" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lM5-yt-nYm" userLabel="Wet Tap">
+                                                    <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lM5-yt-nYm" userLabel="Wet Tap">
                                                         <rect key="frame" x="0.0" y="72" width="80" height="22"/>
                                                     </view>
                                                 </subviews>
@@ -284,6 +244,46 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uNx-0G-OWZ" userLabel="EditingView">
+                                <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="gry-aw-80i" userLabel="EditingBoxView">
+                                        <rect key="frame" x="212.5" y="20" width="242" height="66"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gm-sU-zom">
+                                                <rect key="frame" x="16" y="23" width="41.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" name="Labels"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="100.00" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="5xm-4x-x9O">
+                                                <rect key="frame" x="66" y="16" width="160" height="34"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="160" id="dPh-GW-1UK"/>
+                                                </constraints>
+                                                <color key="textColor" name="Labels"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" keyboardAppearance="alert" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                            </textField>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                        <constraints>
+                                            <constraint firstItem="5xm-4x-x9O" firstAttribute="leading" secondItem="0gm-sU-zom" secondAttribute="trailing" constant="8.5" id="36j-4e-YyK"/>
+                                            <constraint firstAttribute="trailing" secondItem="5xm-4x-x9O" secondAttribute="trailing" constant="16" id="Qcx-iE-s5p"/>
+                                            <constraint firstItem="0gm-sU-zom" firstAttribute="firstBaseline" secondItem="5xm-4x-x9O" secondAttribute="firstBaseline" id="RPh-ee-zfb"/>
+                                            <constraint firstAttribute="bottom" secondItem="5xm-4x-x9O" secondAttribute="bottom" constant="16" id="cmP-9m-IdQ"/>
+                                            <constraint firstItem="5xm-4x-x9O" firstAttribute="top" secondItem="gry-aw-80i" secondAttribute="top" constant="16" id="gBA-8n-gHn"/>
+                                            <constraint firstItem="0gm-sU-zom" firstAttribute="leading" secondItem="gry-aw-80i" secondAttribute="leading" constant="16" id="wt2-jK-nEr"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.045474425056912252" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstItem="gry-aw-80i" firstAttribute="centerX" secondItem="uNx-0G-OWZ" secondAttribute="centerX" id="U5P-bv-jpS"/>
+                                    <constraint firstItem="gry-aw-80i" firstAttribute="top" secondItem="uNx-0G-OWZ" secondAttribute="top" constant="20" symbolic="YES" id="rfc-aW-xqN"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="u2v-qu-mbu"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -307,12 +307,12 @@
                         <outlet property="depthTapEdit" destination="8ki-wy-l3o" id="seE-kp-1kq"/>
                         <outlet property="depthValueLabel" destination="GCP-HR-UOg" id="SVh-r5-Iot"/>
                         <outlet property="dryMixControl" destination="Jzc-6g-Fgq" id="vnH-lR-dzt"/>
-                        <outlet property="dryMixTapEdit" destination="rYA-kZ-hpS" id="Ucj-hc-CiM"/>
+                        <outlet property="dryMixTapEdit" destination="rYA-kZ-hpS" id="EAG-Fa-tO2"/>
                         <outlet property="dryMixValueLabel" destination="N2N-20-gAu" id="Bby-W8-rJw"/>
-                        <outlet property="editingBackground" destination="uNx-0G-OWZ" id="VV2-67-t57"/>
+                        <outlet property="editingBoxView" destination="gry-aw-80i" id="hTG-mL-eHi"/>
                         <outlet property="editingLabel" destination="0gm-sU-zom" id="jaD-0g-fWq"/>
                         <outlet property="editingValue" destination="5xm-4x-x9O" id="BBc-5K-dm7"/>
-                        <outlet property="editingView" destination="gry-aw-80i" id="RfL-wf-Jbf"/>
+                        <outlet property="editingView" destination="uNx-0G-OWZ" id="nhO-nt-xuj"/>
                         <outlet property="odd90Switch" destination="FUB-33-WqX" id="Nd8-xe-fP0"/>
                         <outlet property="rateControl" destination="hui-tD-xRO" id="xxO-Sa-b9f"/>
                         <outlet property="rateTapEdit" destination="mHo-9f-pLo" id="VPb-gR-M5K"/>

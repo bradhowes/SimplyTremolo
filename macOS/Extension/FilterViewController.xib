@@ -23,12 +23,12 @@
                 <outlet property="wetMixValueLabel" destination="Bgn-eW-ymD" id="8Tg-xA-iKe"/>
             </connections>
         </customObject>
-        <customView wantsLayer="YES" id="Hz6-mo-xeY" userLabel="AUv3 FilterView">
+        <customView wantsLayer="YES" appearanceType="darkAqua" id="Hz6-mo-xeY" userLabel="AUv3 FilterView">
             <rect key="frame" x="0.0" y="0.0" width="587" height="300"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wUu-Yz-l9v" userLabel="v1.0.0">
-                    <rect key="frame" x="495" y="84" width="38" height="16"/>
+                    <rect key="frame" x="496" y="84" width="37" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="v1.0.1" id="p30-Bk-a8R" userLabel="APP_VERSION">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="Title"/>

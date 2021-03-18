@@ -1,6 +1,6 @@
 ![CI](https://github.com/bradhowes/SimplyTremolo/workflows/CI/badge.svg?branch=main)
 
-![](macOS/App/Assets.xcassets/AppIcon.appiconset/256px.png)
+![](image.png)
 
 # About SimplyTremolo
 

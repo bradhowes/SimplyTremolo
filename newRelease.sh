@@ -75,7 +75,7 @@ if [[ ! -f "${PWD}/exportOptions.plist" ]]; then
   <key>method</key>
   <string>app-store</string>
   <key>teamID</key>
-  <string>UP6SS5ES7E</string>
+  <string>${DEVELOPMENT_TEAM}</string>
   <key>destination</key>
   <string>upload</string>
   <key>signingStyle</key>

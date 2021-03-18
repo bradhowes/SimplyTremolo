@@ -10,18 +10,41 @@ The code was developed in Xcode 12.4 on macOS 11.2.1. I have tested on both macO
 GarageBand, but also using test hosts on both devices as well as the excellent
 [AUM](https://apps.apple.com/us/app/aum-audio-mixer/id1055636344) app on iOS.
 
-It passes all
+## Quick Guide
+
+* Rate -- controls the low-frequency oscillator (LFO) that changes the amplitude of the input signal. The higher
+  the number, the faster the oscillation.
+* Depth -- controls how much of the signal is attenuated by the LFO. At its minimum value, there is no
+  perceptible change. Going all the way to 100% means the volume will drop to zero when the LFO is at its
+  largest value.
+* Square -- normally LFO shape is a triangle wave, linearly rising and falling betwen -1.0 and 1.0. When this
+  switch is enabled, the shape changes to something that just does -1.0 and 1.0 without any intermediate values.
+  Odd and often noisy but might just be the effect you are after.
+* Dry -- the amount of original signal that is used in the output signal.
+* Wet -- the amount of the modified signal that is used in the output signal.
+* Odd 90° -- oscillate all 'odd' channels with an LFO that is out-of-phase (for stereo, left is even and right
+  is odd).
+
+The row of buttons at the top of the host demonstration app let you play a prerecorded sample throught the
+effect and try out different pre-installed or "factory" presets. Note that these controls are not present in the
+audio unit itself, but the factory presets are available from within other AUv3 hosts such as GarageBand -- as
+are user presets if the host supports them.
+
+## AUv3 Compliance
+
+This audio unit passes all
 [auval](https://developer.apple.com/library/archive/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/AudioUnitDevelopmentFundamentals/AudioUnitDevelopmentFundamentals.html)
-tests:
+tests, so it should work in your AUv3-compatible host application:
 
 ```
 % auval -v aufx trlo BRay
 ```
 
-Note that To successfully compile you will need to edit
-[Configuration/Common.xcconfig](Configuration/Common.xcconfig) and change `DEVELOPMENT_TEAM` to hold your own
-Apple developer account ID so you can sign the binaries. You should also adjust other settings as well to
-properly identify you and/or your company if you desire.
+# Building
+
+To successfully compile you will need to edit [Configuration/Common.xcconfig](Configuration/Common.xcconfig) and
+change `DEVELOPMENT_TEAM` to hold your own Apple developer account ID so you can sign the binaries. You should
+also adjust other settings as well to properly identify you and/or your company if you desire.
 
 > :warning: You are free to use the code according to [LICENSE.md](LICENSE.md), but you must not replicate
 > someone's UI, icons, samples, or any other assets if you are going to distribute your effect on the App Store.

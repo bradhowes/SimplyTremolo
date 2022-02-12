@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="FilterViewController" customModule="SimplyTremoloFramework" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="ViewController" customModule="SimplyTremoloAU" customModuleProvider="target">
             <connections>
-                <outlet property="controlsView" destination="Scb-VG-OuL" id="0IV-y9-rPy"/>
-                <outlet property="depthControl" destination="25e-Ls-Yhr" id="NAX-JV-Gf8"/>
-                <outlet property="depthValueLabel" destination="YuF-pJ-Rk3" id="HSi-eR-FjA"/>
-                <outlet property="dryMixControl" destination="oTi-Ii-NHh" id="cla-Ev-Yts"/>
-                <outlet property="dryMixValueLabel" destination="k3X-9K-MVH" id="hDe-Hq-k1a"/>
-                <outlet property="odd90Switch" destination="jyv-e6-r9o" id="RMs-nM-jWn"/>
-                <outlet property="rateControl" destination="vJE-Qk-G6z" id="rkx-pf-Ho4"/>
-                <outlet property="rateValueLabel" destination="FNZ-OF-PRt" id="8Xq-5l-ltZ"/>
-                <outlet property="squareWaveformSwitch" destination="hS6-fo-BBE" id="sin-97-vSy"/>
+                <outlet property="controlsView" destination="oPI-wC-N8q" id="Lh2-Hd-Mki"/>
+                <outlet property="depthControl" destination="25e-Ls-Yhr" id="0Jj-Jr-peu"/>
+                <outlet property="depthValueLabel" destination="YuF-pJ-Rk3" id="6Fr-3a-pYP"/>
+                <outlet property="dryControl" destination="oTi-Ii-NHh" id="N1S-AR-38Q"/>
+                <outlet property="dryMixControl" destination="oTi-Ii-NHh" id="CI5-uc-4uJ"/>
+                <outlet property="dryMixValueLabel" destination="k3X-9K-MVH" id="Cd4-7e-5a6"/>
+                <outlet property="dryValueLabel" destination="k3X-9K-MVH" id="ILZ-ei-gyA"/>
+                <outlet property="odd90Control" destination="jyv-e6-r9o" id="1lf-Wv-Z2Q"/>
+                <outlet property="rateControl" destination="vJE-Qk-G6z" id="Lil-it-7yH"/>
+                <outlet property="rateValueLabel" destination="FNZ-OF-PRt" id="CrX-Oo-V4w"/>
+                <outlet property="squareWaveControl" destination="hS6-fo-BBE" id="9b8-JY-jHy"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="qQA-8q-X5q"/>
-                <outlet property="wetMixControl" destination="KfU-K8-Mrs" id="kP1-HL-vvY"/>
-                <outlet property="wetMixValueLabel" destination="Bgn-eW-ymD" id="8Tg-xA-iKe"/>
+                <outlet property="wetControl" destination="KfU-K8-Mrs" id="hUJ-S3-FYt"/>
+                <outlet property="wetMixControl" destination="KfU-K8-Mrs" id="Hm2-hX-PBB"/>
+                <outlet property="wetMixValueLabel" destination="Bgn-eW-ymD" id="RmB-2s-Nvo"/>
+                <outlet property="wetValueLabel" destination="Bgn-eW-ymD" id="nzg-qe-Mp3"/>
             </connections>
         </customObject>
         <customView wantsLayer="YES" appearanceType="darkAqua" id="Hz6-mo-xeY" userLabel="AUv3 FilterView">
@@ -31,7 +35,7 @@
                     <rect key="frame" x="493" y="84" width="40" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="v1.0.4" id="p30-Bk-a8R" userLabel="APP_VERSION">
                         <font key="font" metaFont="system"/>
-                        <color key="textColor" name="Title"/>
+                        <color key="textColor" name="title"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -39,7 +43,7 @@
                     <rect key="frame" x="54" y="82" width="479" height="137"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Tremolo" id="bWS-WG-WZp">
                         <font key="font" size="120" name="Desdemona"/>
-                        <color key="textColor" name="Title"/>
+                        <color key="textColor" name="title"/>
                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </textFieldCell>
                 </textField>
@@ -55,21 +59,18 @@
                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="QvQ-6Z-ng9" userLabel="Rate">
                                             <rect key="frame" x="0.0" y="0.0" width="120" height="136"/>
                                             <subviews>
-                                                <customView identifier="0" wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vJE-Qk-G6z" userLabel="Rate" customClass="Knob" customModule="SimplyTremoloFramework" customModuleProvider="target">
+                                                <customView identifier="0" wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vJE-Qk-G6z" userLabel="Rate" customClass="Knob" customModule="Knob_macOS">
                                                     <rect key="frame" x="0.0" y="16" width="120" height="120"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="120" id="QUK-PT-mqw"/>
                                                         <constraint firstAttribute="height" constant="120" id="vAd-uR-9t8"/>
                                                     </constraints>
-                                                    <connections>
-                                                        <action selector="rateChangedWithControl:" target="-2" id="CeN-uh-SW6"/>
-                                                    </connections>
                                                 </customView>
-                                                <textField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FNZ-OF-PRt" userLabel="Rate" customClass="FocusAwareTextField" customModule="SimplyTremoloFramework" customModuleProvider="target">
+                                                <textField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FNZ-OF-PRt" userLabel="Rate" customClass="FocusAwareTextField" customModule="AUv3Support">
                                                     <rect key="frame" x="-2" y="0.0" width="124" height="24"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" allowsUndo="NO" alignment="center" title="Rate" usesSingleLineMode="YES" id="k91-bk-kf4">
                                                         <font key="font" metaFont="system" size="20"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="label"/>
                                                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </textFieldCell>
                                                 </textField>
@@ -87,21 +88,18 @@
                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="ezC-D6-SeQ" userLabel="Depth">
                                             <rect key="frame" x="130" y="0.0" width="120" height="136"/>
                                             <subviews>
-                                                <customView identifier="1" wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="25e-Ls-Yhr" userLabel="Depth" customClass="Knob" customModule="SimplyTremoloFramework" customModuleProvider="target">
+                                                <customView identifier="1" wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="25e-Ls-Yhr" userLabel="Depth" customClass="Knob" customModule="Knob_macOS">
                                                     <rect key="frame" x="0.0" y="16" width="120" height="120"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="120" id="EDP-SX-7Vf"/>
                                                         <constraint firstAttribute="height" constant="120" id="V2V-kw-xaN"/>
                                                     </constraints>
-                                                    <connections>
-                                                        <action selector="depthChangedWithControl:" target="-2" id="O23-Cb-zch"/>
-                                                    </connections>
                                                 </customView>
-                                                <textField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YuF-pJ-Rk3" userLabel="Depth" customClass="FocusAwareTextField" customModule="SimplyTremoloFramework" customModuleProvider="target">
+                                                <textField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YuF-pJ-Rk3" userLabel="Depth" customClass="FocusAwareTextField" customModule="AUv3Support">
                                                     <rect key="frame" x="-2" y="0.0" width="124" height="24"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" allowsUndo="NO" alignment="center" title="Depth" usesSingleLineMode="YES" id="dUD-TV-FfK">
                                                         <font key="font" metaFont="system" size="20"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="label"/>
                                                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </textFieldCell>
                                                 </textField>
@@ -135,14 +133,14 @@
                                                 <switch identifier="4" wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" state="on" translatesAutoresizingMaskIntoConstraints="NO" id="hS6-fo-BBE" userLabel="SquareWave">
                                                     <rect key="frame" x="1" y="22" width="42" height="25"/>
                                                     <connections>
-                                                        <action selector="squareWaveChangedWithControl:" target="-2" id="H0G-Bm-xcG"/>
+                                                        <action selector="handleSquareWaveChanged:" target="-2" id="q8z-Fv-VxF"/>
                                                     </connections>
                                                 </switch>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gc4-Bw-KR1">
                                                     <rect key="frame" x="-2" y="0.0" width="47" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Square" id="tLt-Er-i84">
                                                         <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="label"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
@@ -159,21 +157,18 @@
                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="5IG-a9-dve">
                                             <rect key="frame" x="53" y="0.0" width="80" height="88"/>
                                             <subviews>
-                                                <customView identifier="2" translatesAutoresizingMaskIntoConstraints="NO" id="oTi-Ii-NHh" userLabel="DryMix" customClass="Knob" customModule="SimplyTremoloFramework" customModuleProvider="target">
+                                                <customView identifier="2" translatesAutoresizingMaskIntoConstraints="NO" id="oTi-Ii-NHh" userLabel="DryMix" customClass="Knob" customModule="Knob_macOS">
                                                     <rect key="frame" x="0.0" y="8" width="80" height="80"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="80" id="Vze-vS-v09"/>
                                                         <constraint firstAttribute="width" constant="80" id="cgS-KS-MTB"/>
                                                     </constraints>
-                                                    <connections>
-                                                        <action selector="dryChangedWithControl:" target="-2" id="PBb-AE-JvI"/>
-                                                    </connections>
                                                 </customView>
-                                                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k3X-9K-MVH" customClass="FocusAwareTextField" customModule="SimplyTremoloFramework" customModuleProvider="target">
+                                                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k3X-9K-MVH" customClass="FocusAwareTextField" customModule="AUv3Support">
                                                     <rect key="frame" x="-2" y="0.0" width="84" height="16"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" allowsUndo="NO" alignment="center" title="Dry" usesSingleLineMode="YES" id="HiA-bC-Obk">
                                                         <font key="font" usesAppearanceFont="YES"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="label"/>
                                                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </textFieldCell>
                                                 </textField>
@@ -191,21 +186,18 @@
                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="7GM-5R-GOQ">
                                             <rect key="frame" x="143" y="0.0" width="80" height="88"/>
                                             <subviews>
-                                                <customView identifier="3" translatesAutoresizingMaskIntoConstraints="NO" id="KfU-K8-Mrs" userLabel="WetMix" customClass="Knob" customModule="SimplyTremoloFramework" customModuleProvider="target">
+                                                <customView identifier="3" translatesAutoresizingMaskIntoConstraints="NO" id="KfU-K8-Mrs" userLabel="WetMix" customClass="Knob" customModule="Knob_macOS">
                                                     <rect key="frame" x="0.0" y="8" width="80" height="80"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="80" id="6WU-mH-P2b"/>
                                                         <constraint firstAttribute="width" constant="80" id="czU-wj-DBM"/>
                                                     </constraints>
-                                                    <connections>
-                                                        <action selector="wetChangedWithControl:" target="-2" id="V4x-5w-hAy"/>
-                                                    </connections>
                                                 </customView>
-                                                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bgn-eW-ymD" customClass="FocusAwareTextField" customModule="SimplyTremoloFramework" customModuleProvider="target">
+                                                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bgn-eW-ymD" customClass="FocusAwareTextField" customModule="AUv3Support">
                                                     <rect key="frame" x="-2" y="0.0" width="84" height="16"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" allowsUndo="NO" alignment="center" title="Wet" usesSingleLineMode="YES" id="sdg-kR-mgP">
                                                         <font key="font" usesAppearanceFont="YES"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="label"/>
                                                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </textFieldCell>
                                                 </textField>
@@ -226,14 +218,14 @@
                                                 <switch identifier="5" wantsLayer="YES" horizontalHuggingPriority="1000" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="jyv-e6-r9o" userLabel="Odd 90°">
                                                     <rect key="frame" x="5" y="22" width="42" height="25"/>
                                                     <connections>
-                                                        <action selector="odd90ChangedWithControl:" target="-2" id="7aY-NV-ttr"/>
+                                                        <action selector="handleOdd90Changed:" target="-2" id="wFx-OC-Uy3"/>
                                                     </connections>
                                                 </switch>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jmn-N4-uIl">
                                                     <rect key="frame" x="-2" y="0.0" width="56" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Odd 90°" id="V6Q-QZ-kKG">
                                                         <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="label"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
@@ -294,11 +286,11 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
     </objects>
     <resources>
-        <namedColor name="Labels">
+        <namedColor name="label">
             <color red="0.69800001382827759" green="0.47999998927116394" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="Title">
-            <color red="0.41999998688697815" green="0.0" blue="1" alpha="0.34999999403953552" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="title">
+            <color red="1" green="0.5" blue="0.0" alpha="0.34999999403953552" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

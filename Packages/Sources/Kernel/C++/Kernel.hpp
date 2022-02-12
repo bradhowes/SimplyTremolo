@@ -20,8 +20,7 @@
  of itself. The delay value oscillates at a defined frequency which causes the delayed audio to vary in pitch due to it
  being sped up or slowed down.
  */
-class Kernel : public EventProcessor<Kernel> {
-public:
+struct Kernel : public EventProcessor<Kernel> {
   using super = EventProcessor<Kernel>;
   friend super;
 
@@ -63,9 +62,27 @@ public:
    */
   AUValue getParameterValue(AUParameterAddress address) const;
 
+  void initialize(int channelCount, double sampleRate, AUAudioFrameCount maxFramesToRender) {
+    lfo_.setSampleRate(sampleRate);
+    attenuationBuffer_.resize(maxFramesToRender * 2, 0.0);
+  }
+
+#ifndef DEBUG
+private:
+#endif
+
+  void setRampedParameterValue(AUParameterAddress address, AUValue value, AUAudioFrameCount duration);
+
+  void setParameterFromEvent(const AUParameterEvent& event) {
+    if (event.rampDurationSampleFrames == 0) {
+      setParameterValue(event.parameterAddress, event.value);
+    } else {
+      setRampedParameterValue(event.parameterAddress, event.value, event.rampDurationSampleFrames);
+    }
+  }
+
   /**
-   Perform rendering of samples. Exposed here for testing purposes. In normal AU processing it is invoked by the
-   `EventProcessor::renderFrames` method.
+   Perform rendering of samples.
    */
   void doRendering(std::vector<AUValue*>& ins, std::vector<AUValue*>& outs, AUAudioFrameCount frameCount) {
     bool odd90 = odd90_;
@@ -81,23 +98,6 @@ public:
 
       // Do vector multiply of the attenuation and the input samples. Store in the output buffer.
       vDSP_vmul(attenuation, stride, input, stride, output, stride, vDSP_Length(frameCount));
-    }
-  }
-
-  private:
-
-  void initialize(int channelCount, double sampleRate, AUAudioFrameCount maxFramesToRender) {
-    lfo_.setSampleRate(sampleRate);
-    attenuationBuffer_.resize(maxFramesToRender * 2, 0.0);
-  }
-
-  void setRampedParameterValue(AUParameterAddress address, AUValue value, AUAudioFrameCount duration);
-
-  void setParameterFromEvent(const AUParameterEvent& event) {
-    if (event.rampDurationSampleFrames == 0) {
-      setParameterValue(event.parameterAddress, event.value);
-    } else {
-      setRampedParameterValue(event.parameterAddress, event.value, event.rampDurationSampleFrames);
     }
   }
 
@@ -118,10 +118,10 @@ public:
       auto dry = dry_.frameValue();
 
       // output = (input * dry) + (input * wet * (1.0 - LFO * depth))
-      // output = input * dry + input * (wet - wet * LFO * depth))
-      // output = input * (dry + wet - wet * LFO * depth)
-      // attenuation = dry + wet - wet * LFO * depth
+      //        = input * dry + input * (wet - wet * LFO * depth))
+      //        = input * (dry + wet - wet * LFO * depth)
       //
+      // attenuation = dry + wet - wet * LFO * depth
       attenuationBuffer_[index] = dry + wet - wet * DSP::bipolarToUnipolar(lfo_.value()) * depth;
       if (oddPos > 0) {
         attenuationBuffer_[oddPos++] = dry + wet - wet * DSP::bipolarToUnipolar(lfo_.quadPhaseValue()) * depth;
@@ -138,8 +138,6 @@ public:
   PercentageParameter<AUValue> wet_;
   BoolParameter squareWave_;
   BoolParameter odd90_;
-
-public:
   std::vector<AUValue> attenuationBuffer_;
   LFO<AUValue> lfo_;
 };

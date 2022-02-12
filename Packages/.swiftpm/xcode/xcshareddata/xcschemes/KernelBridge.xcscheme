@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1240"
+   LastUpgradeVersion = "1320"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C437FE39222367A6008D6C09"
-               BuildableName = "SimplyTremoloHost.app"
-               BlueprintName = "iOS App"
-               ReferencedContainer = "container:SimplyTremolo.xcodeproj">
+               BlueprintIdentifier = "KernelBridge"
+               BuildableName = "KernelBridge"
+               BlueprintName = "KernelBridge"
+               ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -27,15 +27,6 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C437FE39222367A6008D6C09"
-            BuildableName = "SimplyTremoloHost.app"
-            BlueprintName = "iOS App"
-            ReferencedContainer = "container:SimplyTremolo.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <Testables>
       </Testables>
    </TestAction>
@@ -49,23 +40,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C437FE39222367A6008D6C09"
-            BuildableName = "SimplyTremoloHost.app"
-            BlueprintName = "iOS App"
-            ReferencedContainer = "container:SimplyTremolo.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "CG_NUMERICS_SHOW_BACKTRACE"
-            value = "NO"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -73,19 +47,18 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C437FE39222367A6008D6C09"
-            BuildableName = "SimplyTremoloHost.app"
-            BlueprintName = "iOS App"
-            ReferencedContainer = "container:SimplyTremolo.xcodeproj">
+            BlueprintIdentifier = "KernelBridge"
+            BuildableName = "KernelBridge"
+            BlueprintName = "KernelBridge"
+            ReferencedContainer = "container:">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Release">
+      buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"

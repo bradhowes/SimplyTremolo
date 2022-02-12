@@ -63,7 +63,28 @@ public:
    */
   AUValue getParameterValue(AUParameterAddress address) const;
 
-private:
+  /**
+   Perform rendering of samples. Exposed here for testing purposes. In normal AU processing it is invoked by the
+   `EventProcessor::renderFrames` method.
+   */
+  void doRendering(std::vector<AUValue*>& ins, std::vector<AUValue*>& outs, AUAudioFrameCount frameCount) {
+    bool odd90 = odd90_;
+    vDSP_Stride stride{1};
+
+    generateModulations(frameCount, odd90);
+    for (int channel = 0; channel < ins.size(); ++channel) {
+      auto& input = ins[channel];
+      auto& output = outs[channel];
+
+      // Attenuations for 'odd' channels when enabled are in the second half of the attenuation buffer.
+      AUValue* attenuation = (odd90 && (channel & 1)) ? &(attenuationBuffer_[frameCount]) : &(attenuationBuffer_[0]);
+
+      // Do vector multiply of the attenuation and the input samples. Store in the output buffer.
+      vDSP_vmul(attenuation, stride, input, stride, output, stride, vDSP_Length(frameCount));
+    }
+  }
+
+  private:
 
   void initialize(int channelCount, double sampleRate, AUAudioFrameCount maxFramesToRender) {
     lfo_.setSampleRate(sampleRate);
@@ -93,11 +114,12 @@ private:
     size_t oddPos = odd90 ? frameCount : 0;
     for (auto index = 0; index < frameCount; ++index) {
       auto depth = depth_.frameValue();
-      auto wet = depth_.frameValue();
-      auto dry = depth_.frameValue();
+      auto wet = wet_.frameValue();
+      auto dry = dry_.frameValue();
 
-      // output = input * dry + input * wet * (1.0 - LFO * depth)
-      //        = input * (dry + wet - wet * LFO * depth)
+      // output = (input * dry) + (input * wet * (1.0 - LFO * depth))
+      // output = input * dry + input * (wet - wet * LFO * depth))
+      // output = input * (dry + wet - wet * LFO * depth)
       // attenuation = dry + wet - wet * LFO * depth
       //
       attenuationBuffer_[index] = dry + wet - wet * DSP::bipolarToUnipolar(lfo_.value()) * depth;
@@ -109,23 +131,6 @@ private:
     }
   }
 
-  void doRendering(std::vector<AUValue*>& ins, std::vector<AUValue*>& outs, AUAudioFrameCount frameCount) {
-    bool odd90 = odd90_;
-    vDSP_Stride stride{1};
-
-    generateModulations(frameCount, odd90);
-    for (int channel = 0; channel < ins.size(); ++channel) {
-      auto& input = ins[channel];
-      auto& output = outs[channel];
-
-      // Attenuations for 'odd' channels when enabled are in the second half of the attenuation buffer.
-      AUValue* attenuation = (odd90 && (channel & 1)) ? &(attenuationBuffer_[frameCount]) : &(attenuationBuffer_[0]);
-
-      // Do vector multiply of the attenuation and the input samples. Store in the output buffer.
-      vDSP_vmul(attenuation, stride, input, stride, output, stride, vDSP_Length(frameCount));
-    }
-  }
-
   void doMIDIEvent(const AUMIDIEvent& midiEvent) {}
 
   PercentageParameter<AUValue> depth_;
@@ -133,6 +138,8 @@ private:
   PercentageParameter<AUValue> wet_;
   BoolParameter squareWave_;
   BoolParameter odd90_;
+
+public:
   std::vector<AUValue> attenuationBuffer_;
   LFO<AUValue> lfo_;
 };

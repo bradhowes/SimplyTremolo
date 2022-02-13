@@ -20,6 +20,7 @@ extension Knob: AUParameterValueProvider, RangedControl {}
   private let log = Shared.logger(Bundle.main.auBaseName + "AU", "ViewController")
 
   private let parameters = AudioUnitParameters()
+  private let kernel = KernelBridge(Bundle.main.auBaseName)
   private var viewConfig: AUAudioUnitViewConfiguration!
 
   private let logSliderMinValue: Float = 0.0

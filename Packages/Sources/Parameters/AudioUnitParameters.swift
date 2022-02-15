@@ -25,6 +25,7 @@ public final class AudioUnitParameters: NSObject, ParameterSource {
     ("Strange", .init(rate: 2.0, depth: 50, dry: 0, wet: 100, squareWave: 0.0, odd90: 1.0)),
     ("Clover", .init(rate: 10.0, depth: 100, dry: 0, wet: 100, squareWave: 0.0, odd90: 0.0)),
     ("Chopper", .init(rate: 5.0, depth: 100, dry: 0, wet: 100, squareWave: 1.0, odd90: 0.0)),
+    ("Spinner", .init(rate: 1.5, depth: 100, dry: 25, wet: 100, squareWave: 0.0, odd90: 1.0)),
     ("Ponger", .init(rate: 8.0, depth: 100, dry: 0, wet: 100, squareWave: 1.0, odd90: 1.0)),
     ("Trills", .init(rate: 20.0, depth: 62.0, dry: 50, wet: 100, squareWave: 0.0, odd90: 0.0)),
   ]

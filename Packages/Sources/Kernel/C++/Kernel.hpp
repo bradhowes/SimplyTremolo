@@ -8,20 +8,20 @@
 #import <AVFoundation/AVFoundation.h>
 #import <Accelerate/Accelerate.h>
 
-#import "BoolParameter.hpp"
-#import "DelayBuffer.hpp"
-#import "EventProcessor.hpp"
-#import "MillisecondsParameter.hpp"
-#import "LFO.hpp"
-#import "PercentageParameter.hpp"
+#import "DSPHeaders/BoolParameter.hpp"
+#import "DSPHeaders/DelayBuffer.hpp"
+#import "DSPHeaders/EventProcessor.hpp"
+#import "DSPHeaders/MillisecondsParameter.hpp"
+#import "DSPHeaders/LFO.hpp"
+#import "DSPHeaders/PercentageParameter.hpp"
 
 /**
  The audio processing kernel that generates a "flange" effect by combining an audio signal with a slightly delayed copy
  of itself. The delay value oscillates at a defined frequency which causes the delayed audio to vary in pitch due to it
  being sped up or slowed down.
  */
-struct Kernel : public EventProcessor<Kernel> {
-  using super = EventProcessor<Kernel>;
+struct Kernel : public DSPHeaders::EventProcessor<Kernel> {
+  using super = DSPHeaders::EventProcessor<Kernel>;
   friend super;
 
   /**
@@ -81,10 +81,16 @@ private:
     }
   }
 
+  AUAudioUnitStatus doPullInput(const AudioTimeStamp* timestamp, UInt32 frameCount, NSInteger inputBusNumber,
+                                AURenderPullInputBlock pullInputBlock) {
+    return pullInput(timestamp, frameCount, inputBusNumber, pullInputBlock);
+  }
+
   /**
    Perform rendering of samples.
    */
-  void doRendering(std::vector<AUValue*>& ins, std::vector<AUValue*>& outs, AUAudioFrameCount frameCount) {
+  void doRendering(NSInteger outputBusNumber, std::vector<AUValue*>& ins, std::vector<AUValue*>& outs,
+                   AUAudioFrameCount frameCount) {
     bool odd90 = odd90_;
     vDSP_Stride stride{1};
 
@@ -122,9 +128,9 @@ private:
       //        = input * (dry + wet - wet * LFO * depth)
       //
       // attenuation = dry + wet - wet * LFO * depth
-      attenuationBuffer_[index] = dry + wet - wet * DSP::bipolarToUnipolar(lfo_.value()) * depth;
+      attenuationBuffer_[index] = dry + wet - wet * DSPHeaders::DSP::bipolarToUnipolar(lfo_.value()) * depth;
       if (oddPos > 0) {
-        attenuationBuffer_[oddPos++] = dry + wet - wet * DSP::bipolarToUnipolar(lfo_.quadPhaseValue()) * depth;
+        attenuationBuffer_[oddPos++] = dry + wet - wet * DSPHeaders::DSP::bipolarToUnipolar(lfo_.quadPhaseValue()) * depth;
       }
 
       lfo_.increment();
@@ -133,11 +139,11 @@ private:
 
   void doMIDIEvent(const AUMIDIEvent& midiEvent) {}
 
-  PercentageParameter<AUValue> depth_;
-  PercentageParameter<AUValue> dry_;
-  PercentageParameter<AUValue> wet_;
-  BoolParameter squareWave_;
-  BoolParameter odd90_;
+  DSPHeaders::Parameters::PercentageParameter<AUValue> depth_;
+  DSPHeaders::Parameters::PercentageParameter<AUValue> dry_;
+  DSPHeaders::Parameters::PercentageParameter<AUValue> wet_;
+  DSPHeaders::Parameters::BoolParameter squareWave_;
+  DSPHeaders::Parameters::BoolParameter odd90_;
   std::vector<AUValue> attenuationBuffer_;
-  LFO<AUValue> lfo_;
+  DSPHeaders::LFO<AUValue> lfo_;
 };

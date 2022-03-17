@@ -5,6 +5,7 @@
 #import <iomanip>
 #import <iostream>
 
+#import "DSPHeaders/BusBuffers.hpp"
 #import "../../Sources/Kernel/C++/Kernel.hpp"
 
 @import ParameterAddress;
@@ -22,7 +23,7 @@
 - (void)testKernelParams {
   Kernel* kernel = new Kernel("blah");
   AVAudioFormat* format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:44100.0 channels:2];
-  kernel->setRenderingFormat(format, 100);
+  kernel->setRenderingFormat(1, format, 100);
 
   kernel->setParameterValue(ParameterAddressRate, 30.0);
   XCTAssertEqualWithAccuracy(kernel->getParameterValue(ParameterAddressRate), 30.0, 0.001);
@@ -40,6 +41,7 @@
   kernel->setParameterValue(ParameterAddressSquareWave, 1.0);
   XCTAssertEqualWithAccuracy(kernel->getParameterValue(ParameterAddressSquareWave), 1.0, 0.001);
 
+  kernel->setParameterValue(ParameterAddressOdd90, 0.0);
   XCTAssertEqualWithAccuracy(kernel->getParameterValue(ParameterAddressOdd90), 0.0, 0.001);
   kernel->setParameterValue(ParameterAddressOdd90, 1.0);
   XCTAssertEqualWithAccuracy(kernel->getParameterValue(ParameterAddressOdd90), 1.0, 0.001);
@@ -51,7 +53,7 @@
   // 20 samples per second in 2 channels
   AVAudioFormat* format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:samplesPerSecond channels:2];
   // 20 maxFrames
-  kernel->setRenderingFormat(format, samplesPerSecond);
+  kernel->setRenderingFormat(1, format, samplesPerSecond);
   // 1 cycle per second for LFO
   kernel->setParameterValue(ParameterAddressRate, 1);
   // 100% attenuation
@@ -84,7 +86,7 @@
   dump("in0", in0);
   dump("in1", in1);
 
-  kernel->doRendering(inputs, outputs, samplesPerSecond);
+  kernel->doRendering(0, DSPHeaders::BusBuffers(inputs), DSPHeaders::BusBuffers(outputs), samplesPerSecond);
 
   dump("out0", out0);
   dump("out1", out1);
@@ -103,7 +105,7 @@
   // 20 samples per second in 2 channels
   AVAudioFormat* format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:samplesPerSecond channels:2];
   // 20 maxFrames
-  kernel->setRenderingFormat(format, samplesPerSecond);
+  kernel->setRenderingFormat(1, format, samplesPerSecond);
   // 1 cycle per second for LFO
   kernel->setParameterValue(ParameterAddressRate, 1);
   // 100% attenuation
@@ -136,7 +138,7 @@
   dump("in0", in0);
   dump("in1", in1);
 
-  kernel->doRendering(inputs, outputs, samplesPerSecond);
+  kernel->doRendering(1, DSPHeaders::BusBuffers(inputs), DSPHeaders::BusBuffers(outputs), samplesPerSecond);
 
   dump("out0", out0);
   dump("out1", out1);
@@ -155,7 +157,7 @@
   // 20 samples per second in 2 channels
   AVAudioFormat* format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:samplesPerSecond channels:2];
   // 20 maxFrames
-  kernel->setRenderingFormat(format, samplesPerSecond);
+  kernel->setRenderingFormat(1, format, samplesPerSecond);
   // 1 cycle per second for LFO
   kernel->setParameterValue(ParameterAddressRate, 1);
   // 100% attenuation
@@ -188,7 +190,7 @@
   dump("in0", in0);
   dump("in1", in1);
 
-  kernel->doRendering(inputs, outputs, samplesPerSecond);
+  kernel->doRendering(0, DSPHeaders::BusBuffers(inputs), DSPHeaders::BusBuffers(outputs), samplesPerSecond);
 
   dump("out0", out0);
   dump("out1", out1);
@@ -207,7 +209,7 @@
   // 20 samples per second in 2 channels
   AVAudioFormat* format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:samplesPerSecond channels:2];
   // 20 maxFrames
-  kernel->setRenderingFormat(format, samplesPerSecond);
+  kernel->setRenderingFormat(1, format, samplesPerSecond);
   // 1 cycle per second for LFO
   kernel->setParameterValue(ParameterAddressRate, 1);
   // 100% attenuation
@@ -240,7 +242,7 @@
   dump(" in0", in0);
   dump(" in1", in1);
 
-  kernel->doRendering(inputs, outputs, samplesPerSecond);
+  kernel->doRendering(0, DSPHeaders::BusBuffers(inputs), DSPHeaders::BusBuffers(outputs), samplesPerSecond);
 
   dump("out0", out0);
   dump("out1", out1);
@@ -266,7 +268,7 @@
   // 20 samples per second in 2 channels
   AVAudioFormat* format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:samplesPerSecond channels:2];
   // 20 maxFrames
-  kernel->setRenderingFormat(format, samplesPerSecond);
+  kernel->setRenderingFormat(1, format, samplesPerSecond);
   // 1 cycle per second for LFO
   kernel->setParameterValue(ParameterAddressRate, 1);
   // 100% attenuation
@@ -299,7 +301,7 @@
   dump(" in0", in0);
   dump(" in1", in1);
 
-  kernel->doRendering(inputs, outputs, samplesPerSecond);
+  kernel->doRendering(0, DSPHeaders::BusBuffers(inputs), DSPHeaders::BusBuffers(outputs), samplesPerSecond);
 
   dump("out0", out0);
   dump("out1", out1);
@@ -325,7 +327,7 @@
   // 20 samples per second in 2 channels
   AVAudioFormat* format = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:samplesPerSecond channels:2];
   // 20 maxFrames
-  kernel->setRenderingFormat(format, samplesPerSecond);
+  kernel->setRenderingFormat(1, format, samplesPerSecond);
   // 1 cycle per second for LFO
   kernel->setParameterValue(ParameterAddressRate, 1);
   // 100% attenuation
@@ -358,7 +360,7 @@
   dump(" in0", in0);
   dump(" in1", in1);
 
-  kernel->doRendering(inputs, outputs, samplesPerSecond);
+  kernel->doRendering(0, DSPHeaders::BusBuffers(inputs), DSPHeaders::BusBuffers(outputs), samplesPerSecond);
 
   dump("out0", out0);
   dump("out1", out1);

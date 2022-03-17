@@ -113,7 +113,8 @@ function buildTestDeploy # SCHEME DESTINATION
         -project "${PROJECT}" \
         -scheme "${SCHEME}" \
         -destination "${DESTINATION}" \
-        -configuration Release build
+        -configuration Release \
+        build
 
     [[ -f "${ARCHIVE}" ]] && rm -f "${ARCHIVE}"
 
@@ -122,15 +123,15 @@ function buildTestDeploy # SCHEME DESTINATION
         -project "${PROJECT}" \
         -scheme "${SCHEME}" \
         -destination "${DESTINATION}" \
-        -configuration AppStoreDistribution \
+        -configuration Release \
         archive \
         -archivePath "${ARCHIVE}"
 
     xcodebuild \
-        -exportArchive \
         -archivePath "${ARCHIVE}" \
-        -exportOptionsPlist exportOptions.plist \
-        -exportPath "${PWD}"
+        -exportArchive \
+        -exportPath "${PWD}" \
+        -exportOptionsPlist exportOptions.plist
 }
 
 for EACH in ${PLATFORMS}; do

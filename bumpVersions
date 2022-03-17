@@ -34,14 +34,15 @@ def locateFiles(cond):
     for dirname, dirnames, filenames in os.walk('.'):
         if 'DerivedData' in dirnames:
             dirnames.remove('DerivedData')
-        for path in filenames:
-            if cond(path):
-                found.append(os.path.join(dirname, path))
+        for name in filenames:
+            path = os.path.join(dirname, name)
+            if cond(name, path):
+                found.append(path)
     return found
 
 def locateProjectFiles():
-    def cond(path):
-        return path == 'project.pbxproj'
+    def cond(name, path):
+        return name == 'project.pbxproj'
     return locateFiles(cond)
 
 def getCurrentMarketingVersion(projectFiles):
@@ -75,8 +76,8 @@ def updateProjectFiles(projectFiles, marketingVersion, projectVersion):
         open(file, 'w').write(contents)
 
 def locateUIFiles():
-    def cond(path):
-        return os.path.splitext(path)[-1] in ['.storyboard', '.xib']
+    def cond(name, path):
+        return os.path.splitext(name)[-1] in ['.storyboard', '.xib'] and path.find('/.build/') == -1
     return locateFiles(cond)
 
 def updateUIFiles(uiFiles, marketingVersion):
@@ -96,8 +97,8 @@ def runCommand(*args):
         sys.exit(1)
 
 def locateInfoFiles():
-    def cond(path):
-        return path == 'Info.plist'
+    def cond(name, path):
+        return name == 'Info.plist'
     return locateFiles(cond)
 
 def updateInfoFiles(infoFiles, marketingVersion):
@@ -153,6 +154,8 @@ def main():
     updateProjectFiles(projectFiles, marketingVersion, projectVersion)
     updateUIFiles(locateUIFiles(), marketingVersion)
     updateInfoFiles(locateInfoFiles(), marketingVersion)
+
+    open(".version", "w").write(getVersionString(marketingVersion) + '\n')
 
 if __name__ == '__main__':
     main()

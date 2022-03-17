@@ -69,14 +69,14 @@ speaker. When it runs, you can play the sample file and manipulate the effects s
 
 Each OS ([macOS](macOS) and [iOS](iOS)) have the same code layout:
 
-* `App` -- code and configury for the application that hosts the AUv3 app extension
-* `Extension` -- code and configury for the extension itself. It also contains the OS-specific UI layout
+* `App` -- code and configuration for the application that hosts the AUv3 app extension
+* `Extension` -- code and configuration for the extension itself. It also contains the OS-specific UI layout
   definitions, but the controller for the UI is found in
   [Shared/User Interface/FilterViewController.swift](Shared/User%20Interface/FilterViewController.swift)
-* `Framework` -- code configury for the framework that contains the shared code
+* `Framework` -- code configuration for the framework that contains the shared code
 
 The [Shared](Shared) folder holds all of the code that is used by the above products. In it you will find the
-files for the audio unit ([FilterAudioUnit](Shared/FilterAudioUnit.swift)), the user changable parameters for
+files for the audio unit ([FilterAudioUnit](Shared/FilterAudioUnit.swift)), the user changeable parameters for
 the audio unit ([AudioUnitParameters](Shared/AudioUnitParameters.swift)), and the audio processing "kernel"
 written in C++ ([SimplyTremoloKernel](Shared/Kernel/SimplyTremoloKernel.h)).
 

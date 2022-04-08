@@ -22,6 +22,7 @@ extension Knob: AUParameterValueProvider, RangedControl {}
   private let parameters = AudioUnitParameters()
   private let kernel = KernelBridge(Bundle.main.auBaseName)
   private var viewConfig: AUAudioUnitViewConfiguration!
+  private var keyValueObserver: NSKeyValueObservation?
 
   private let logSliderMinValue: Float = 0.0
   private let logSliderMaxValue: Float = 9.0
@@ -74,9 +75,8 @@ extension Knob: AUParameterValueProvider, RangedControl {}
   // The bottom constraint of the editingBackground that controls the vertical position of the editor
   @IBOutlet weak var editingBackgroundBottomConstraint: NSLayoutConstraint!
 
-  // Mapping of parameter address value to array of controls. Use array since two controls exist in pairs to handle
-  // constrained width layouts.
-  private var editors = [ParameterAddress : AUParameterEditor]()
+  private var editors = [AUParameterEditor]()
+  private var editorMap = [ParameterAddress : AUParameterEditor]()
 
   public var audioUnit: FilterAudioUnit? {
     didSet {
@@ -147,16 +147,20 @@ extension ViewController {
       let editor = FloatParameterEditor(parameter: parameters[parameterAddress],
                                         formatter: parameters.valueFormatter(parameterAddress),
                                         rangedControl: knob, label: label)
-      editors[parameterAddress] = editor
+      editors.append(editor)
+      editorMap[parameterAddress] = editor
       editor.setValueEditor(valueEditor: valueEditor, tapToEdit: tapEdit)
     }
 
     os_log(.info, log: log, "createEditors - creating bool parameter editors")
     for (parameterAddress, control) in switches {
       os_log(.info, log: log, "createEditors - before BooleanParameterEditor")
-      editors[parameterAddress] = BooleanParameterEditor(parameter: parameters[parameterAddress],
-                                                         booleanControl: control)
+      let editor = BooleanParameterEditor(parameter: parameters[parameterAddress], booleanControl: control)
+      editors.append(editor)
+      editorMap[parameterAddress] = editor
     }
+
+    keyValueObserver = Self.updateEditorsOnPresetChange(audioUnit!, editors: editors)
 
     os_log(.info, log: log, "createEditors END")
   }
@@ -188,7 +192,7 @@ extension ViewController {
       audioUnit.currentPreset = nil
     }
 
-    editors[address]?.controlChanged(source: control)
+    editorMap[address]?.controlChanged(source: control)
 
     os_log(.debug, log: log, "controlChanged END")
   }

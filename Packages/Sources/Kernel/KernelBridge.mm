@@ -21,15 +21,21 @@
   kernel_->setRenderingFormat(busCount, inputFormat, maxFramesToRender);
 }
 
-- (void)renderingStopped { kernel_->renderingStopped(); }
+- (void)deallocateRenderResources { kernel_->deallocateRenderResources(); }
 
-- (AUInternalRenderBlock)internalRenderBlock {
-  auto& kernel = *kernel_;
-  NSInteger bus = 0;
+- (AUInternalRenderBlock)internalRenderBlock:(nullable AUHostTransportStateBlock)tsb {
+  __block auto kernel = kernel_;
+  __block auto transportStateBlock = tsb;
   return ^AUAudioUnitStatus(AudioUnitRenderActionFlags* flags, const AudioTimeStamp* timestamp,
-                            AUAudioFrameCount frameCount, NSInteger, AudioBufferList* output,
+                            AUAudioFrameCount frameCount, NSInteger outputBusNumber, AudioBufferList* output,
                             const AURenderEvent* realtimeEventListHead, AURenderPullInputBlock pullInputBlock) {
-    return kernel.processAndRender(timestamp, frameCount, bus, output, realtimeEventListHead, pullInputBlock);
+    if (transportStateBlock) {
+      AUHostTransportStateFlags flags;
+      transportStateBlock(&flags, NULL, NULL, NULL);
+      bool rendering = flags & AUHostTransportStateMoving;
+      kernel->setRendering(rendering);
+    }
+    return kernel->processAndRender(timestamp, frameCount, outputBusNumber, output, realtimeEventListHead, pullInputBlock);
   };
 }
 

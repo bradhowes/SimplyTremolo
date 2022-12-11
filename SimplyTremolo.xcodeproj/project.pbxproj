@@ -29,7 +29,7 @@
 		BD95A01327B7311D0030B9FA /* AUv3-Support-macOS in Frameworks */ = {isa = PBXBuildFile; productRef = BD95A01227B7311D0030B9FA /* AUv3-Support-macOS */; };
 		BD95A01527B731460030B9FA /* AUv3-DSP-Headers in Frameworks */ = {isa = PBXBuildFile; productRef = BD95A01427B731460030B9FA /* AUv3-DSP-Headers */; };
 		BD95A01627B7F7BF0030B9FA /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4C9EAAB2227D79D003FEE1C /* ViewController.xib */; };
-		BD95A01727B7FA2B0030B9FA /* SimplyTremoloAU.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C437FEA0222368B7008D6C09 /* SimplyTremoloAU.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BD95A01727B7FA2B0030B9FA /* SimplyTremoloAU.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C437FEA0222368B7008D6C09 /* SimplyTremoloAU.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BD9FA81B24A9505300FA9940 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD9FA81A24A9505300FA9940 /* Default-568h@2x.png */; };
 		BDB7CE93249EC556009580D5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDB7CE92249EC556009580D5 /* Accelerate.framework */; };
 		BDB7CE94249EC565009580D5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDB7CE92249EC556009580D5 /* Accelerate.framework */; };
@@ -44,7 +44,7 @@
 		BDF15B4A25FC0438008E5965 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BDF15B4625FC0438008E5965 /* Media.xcassets */; };
 		BDF15B4B25FC0438008E5965 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BDF15B4625FC0438008E5965 /* Media.xcassets */; };
 		C433F56122404C7C00F1B750 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C433F56022404C7C00F1B750 /* ViewController.swift */; };
-		C437FE712223686D008D6C09 /* SimplyTremoloAU.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C437FE632223686D008D6C09 /* SimplyTremoloAU.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C437FE712223686D008D6C09 /* SimplyTremoloAU.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C437FE632223686D008D6C09 /* SimplyTremoloAU.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C4737B0B2231D930002CAD0B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4737B0A2231D930002CAD0B /* AudioToolbox.framework */; };
 		C4BEE7B122236A29001E6B6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4BEE7A422236A29001E6B6D /* Assets.xcassets */; };
 		C4BEE7B322236A29001E6B6D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4BEE7A722236A29001E6B6D /* Main.storyboard */; };
@@ -75,15 +75,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		BD95A01A27B7FA2C0030B9FA /* Embed App Extensions */ = {
+		BD95A01A27B7FA2C0030B9FA /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				BD95A01727B7FA2B0030B9FA /* SimplyTremoloAU.appex in Embed App Extensions */,
+				BD95A01727B7FA2B0030B9FA /* SimplyTremoloAU.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C437FE5E222367CD008D6C09 /* Embed Frameworks */ = {
@@ -96,15 +96,15 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C437FE752223686D008D6C09 /* Embed App Extensions */ = {
+		C437FE752223686D008D6C09 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				C437FE712223686D008D6C09 /* SimplyTremoloAU.appex in Embed App Extensions */,
+				C437FE712223686D008D6C09 /* SimplyTremoloAU.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C4660A632225F9A0007BE3B1 /* Embed Frameworks */ = {
@@ -374,7 +374,7 @@
 				C437FE37222367A6008D6C09 /* Frameworks */,
 				C437FE38222367A6008D6C09 /* Resources */,
 				C437FE5E222367CD008D6C09 /* Embed Frameworks */,
-				C437FE752223686D008D6C09 /* Embed App Extensions */,
+				C437FE752223686D008D6C09 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -423,7 +423,7 @@
 				C437FE772223688D008D6C09 /* Frameworks */,
 				C437FE782223688D008D6C09 /* Resources */,
 				C4660A632225F9A0007BE3B1 /* Embed Frameworks */,
-				BD95A01A27B7FA2C0030B9FA /* Embed App Extensions */,
+				BD95A01A27B7FA2C0030B9FA /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -472,7 +472,7 @@
 			attributes = {
 				DefaultBuildSystemTypeForWorkspace = Latest;
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1410;
 				ORGANIZATIONNAME = Apple;
 				TargetAttributes = {
 					C437FE39222367A6008D6C09 = {
@@ -684,6 +684,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -883,6 +884,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 20220408171914;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = UP6SS5ES7E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -953,6 +955,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 20220408171914;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = UP6SS5ES7E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1009,6 +1012,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1222,6 +1226,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 20220408171914;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UP6SS5ES7E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1299,6 +1304,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 20220408171914;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UP6SS5ES7E;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1394,8 +1400,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/bradhowes/AUv3Support";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 		BD959FFE27B6DDE80030B9FA /* XCRemoteSwiftPackageReference "knob" */ = {

@@ -13,7 +13,7 @@ private extension Array where Element == AUParameter {
 /**
  Definitions for the runtime parameters of the filter.
  */
-public final class AudioUnitParameters: NSObject, ParameterSource {
+public final class Parameters: NSObject, ParameterSource {
 
   private let log = Shared.logger("AudioUnitParameters")
 
@@ -21,7 +21,7 @@ public final class AudioUnitParameters: NSObject, ParameterSource {
   public let parameters: [AUParameter] = ParameterAddress.allCases.map { $0.parameterDefinition.parameter }
 
   /// Array of 2-tuple values that pair a factory preset name and its definition
-  public let factoryPresetValues: [(name: String, preset: FilterPreset)] = [
+  public let factoryPresetValues: [(name: String, preset: Configuration)] = [
     ("Strange", .init(rate: 2.0, depth: 50, dry: 0, wet: 100, squareWave: 0.0, odd90: 1.0)),
     ("Clover", .init(rate: 10.0, depth: 100, dry: 0, wet: 100, squareWave: 0.0, odd90: 0.0)),
     ("Chopper", .init(rate: 5.0, depth: 100, dry: 0, wet: 100, squareWave: 1.0, odd90: 0.0)),
@@ -55,7 +55,7 @@ public final class AudioUnitParameters: NSObject, ParameterSource {
   }
 }
 
-extension AudioUnitParameters {
+extension Parameters {
 
   private var missingParameter: AUParameter { fatalError() }
 
@@ -71,10 +71,6 @@ extension AudioUnitParameters {
     parameterTree.parameter(withAddress: address.parameterAddress) ?? missingParameter
   }
 
-  public func valueFormatter(_ address: ParameterAddress) -> (AUValue) -> String {
-    self[address].valueFormatter
-  }
-
   private func installParameterValueFormatter() {
     parameterTree.implementorStringFromValueCallback = { param, valuePtr in
       let value: AUValue
@@ -83,7 +79,7 @@ extension AudioUnitParameters {
       } else {
         value = param.value
       }
-      return String(format: param.stringFormatForValue, value) + param.suffix
+      return param.displayValueFormatter(value)
     }
   }
 
@@ -91,7 +87,7 @@ extension AudioUnitParameters {
    Accept new values for the filter settings. Uses the AUParameterTree framework for communicating the changes to the
    AudioUnit.
    */
-  public func setValues(_ preset: FilterPreset) {
+  public func setValues(_ preset: Configuration) {
     rate.value = preset.rate
     depth.value = preset.depth
     dry.value = preset.dry
@@ -101,27 +97,18 @@ extension AudioUnitParameters {
   }
 }
 
-extension AUParameter {
+extension AUParameter: AUParameterFormatting {
 
   /// Obtain string to use to separate a formatted value from its units name
-  var unitSeparator: String {
-    switch parameterAddress {
-    case .rate, .depth: return " "
-    default: return ""
-    }
-  }
+  public var unitSeparator: String { parameterAddress == .rate || parameterAddress == .depth ? " " : "" }
   /// Obtain the suffix to apply to a formatted value
-  var suffix: String { unitSeparator + (unitName ?? "") }
+  public var suffix: String { makeFormattingSuffix(from: unitName) }
   /// Obtain the format to use in String(format:value) when formatting a values
-  var stringFormatForValue: String {
-    switch parameterAddress {
+  public var stringFormatForDisplayValue: String {
+    switch self.parameterAddress {
     case .dry, .wet: return "%.0f"
     default: return "%.2f"
     }
-  }
-  /// Obtain a closure that will format parameter values into a string
-  var valueFormatter: (AUValue) -> String {
-    { value in String(format: self.stringFormatForValue, value) + self.suffix }
   }
 }
 

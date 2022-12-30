@@ -149,11 +149,11 @@ private:
 
   void doMIDIEvent(const AUMIDIEvent& midiEvent) noexcept {}
 
-  DSPHeaders::Parameters::PercentageParameter<AUValue> depth_;
-  DSPHeaders::Parameters::PercentageParameter<AUValue> dry_;
-  DSPHeaders::Parameters::PercentageParameter<AUValue> wet_;
-  DSPHeaders::Parameters::BoolParameter squareWave_;
-  DSPHeaders::Parameters::BoolParameter odd90_;
+  DSPHeaders::Parameters::PercentageParameter<> depth_;
+  DSPHeaders::Parameters::PercentageParameter<> dry_;
+  DSPHeaders::Parameters::PercentageParameter<> wet_;
+  DSPHeaders::Parameters::BoolParameter<> squareWave_;
+  DSPHeaders::Parameters::BoolParameter<> odd90_;
   std::vector<AUValue> attenuationBuffer_;
   DSPHeaders::LFO<AUValue> lfo_;
   std::string name_;

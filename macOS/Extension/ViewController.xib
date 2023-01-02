@@ -30,8 +30,8 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wUu-Yz-l9v" userLabel="v1.0.0">
-                    <rect key="frame" x="494" y="84" width="39" height="16"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="v2.1.0" id="p30-Bk-a8R" userLabel="APP_VERSION">
+                    <rect key="frame" x="492" y="84" width="41" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="v3.0.0" id="p30-Bk-a8R" userLabel="APP_VERSION">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="title"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -279,7 +279,7 @@
     </objects>
     <resources>
         <namedColor name="label">
-            <color red="1" green="0.76399999856948853" blue="0.36700001358985901" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.69800001382827759" green="0.47999998927116394" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="title">
             <color red="0.41999998688697815" green="0.0" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>

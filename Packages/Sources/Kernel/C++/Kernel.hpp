@@ -79,11 +79,9 @@ struct Kernel : public DSPHeaders::EventProcessor<Kernel> {
     attenuationBuffer_.resize(maxFramesToRender * 2, 0.0);
   }
 
-#ifndef DEBUG
 private:
-#endif
 
-  void setParameterFromEvent(const AUParameterEvent& event) {
+  void doParameterEvent(const AUParameterEvent& event) {
     setRampedParameterValue(event.parameterAddress, event.value, event.rampDurationSampleFrames);
   }
 

@@ -23,7 +23,7 @@ final class AudioUnitParametersTests: XCTestCase {
   }
 
   func testParameterDefinitions() throws {
-    let aup = AudioUnitParameters()
+    let aup = Parameters()
     for (index, address) in ParameterAddress.allCases.enumerated() {
       XCTAssertTrue(aup.parameters[index] == aup[address])
     }

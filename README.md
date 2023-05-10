@@ -7,7 +7,8 @@
 
 # About SimplyTremolo
 
-This is a simple audio plugin that generates a tremolo effect on iOS and macOS platforms.
+This is a simple audio plugin that generates a tremolo effect on iOS and macOS platforms. It uses the Apple 
+Accelerate routine to perform phased attenuation for all frames in one shot.
 
 The code was developed in Xcode 12.4 on macOS 11.2.1. I have tested on both macOS and iOS devices primarily in
 GarageBand, but also using test hosts on both devices as well as the excellent

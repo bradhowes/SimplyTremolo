@@ -81,6 +81,8 @@ struct Kernel : public DSPHeaders::EventProcessor<Kernel> {
 
 private:
 
+  void doMIDIEvent(const AUMIDIEvent& midiEvent) noexcept {}
+
   void doParameterEvent(const AUParameterEvent& event) {
     setRampedParameterValue(event.parameterAddress, event.value, event.rampDurationSampleFrames);
   }
@@ -95,57 +97,52 @@ private:
   }
 
   /**
-   Perform rendering of samples.
+   Perform rendering of samples. Generate all modulations first and then use vDSP routine to generate samples in one
+   operation per channel.
    */
   void doRendering(NSInteger outputBusNumber, DSPHeaders::BusBuffers ins, DSPHeaders::BusBuffers outs,
                    AUAudioFrameCount frameCount) noexcept {
-    bool odd90 = odd90_;
+    bool odd90 = odd90_.get();
     vDSP_Stride stride{1};
-
     generateModulations(frameCount, odd90);
     for (int channel = 0; channel < ins.size(); ++channel) {
       auto& input = ins[channel];
       auto& output = outs[channel];
-
       // Attenuations for 'odd' channels when enabled are in the second half of the attenuation buffer.
       AUValue* attenuation = (odd90 && (channel & 1)) ? &(attenuationBuffer_[frameCount]) : &(attenuationBuffer_[0]);
-
       // Do vector multiply of the attenuation and the input samples. Store in the output buffer.
       vDSP_vmul(attenuation, stride, input, stride, output, stride, vDSP_Length(frameCount));
     }
   }
 
-  void generateModulations(AUAudioFrameCount frameCount, bool odd90) noexcept {
-
-    // LFO ranges from [-1.0, +1] (bipolar). Convert to unipolar and multiply by depth to get a scaled
-    // attenuation value. We subtract that value from 1.0 so that at small depth values there is not much
-    // attenuation, but at higher values the affect on the amplitude becomes much more pronounced.
-    //
-    // If enabled, we calculate attenuations using the out-of-phase LFO value. The two are not interleaved; the "even"
-    // attenuations are always in positions [0, frameCount) and the "odd" attenuations are at
-    // [frameCount, 2 x frameCount)
-    //
-    size_t oddPos = odd90 ? frameCount : 0;
-    for (auto index = 0; index < frameCount; ++index) {
-      auto depth = depth_.frameValue();
-      auto wet = wet_.frameValue();
-      auto dry = dry_.frameValue();
-
-      // output = (input * dry) + (input * wet * (1.0 - LFO * depth))
-      //        = input * dry + input * (wet - wet * LFO * depth))
-      //        = input * (dry + wet - wet * LFO * depth)
+  void generatePhaseModulations(AUAudioFrameCount index, AUAudioFrameCount frameCount, AUValue depth, AUValue dry,
+                                AUValue wet) noexcept {
+    while (frameCount-- > 0) {
+      // LFO ranges from [-1.0, +1] (bipolar). Convert to unipolar and multiply by depth to get a scaled
+      // attenuation value. We subtract that value from 1.0 so that at small depth values there is not much
+      // attenuation, but at higher values the affect on the amplitude becomes much more pronounced.
       //
-      // attenuation = dry + wet - wet * LFO * depth
-      attenuationBuffer_[index] = dry + wet - wet * DSPHeaders::DSP::bipolarToUnipolar(lfo_.value()) * depth;
-      if (oddPos > 0) {
-        attenuationBuffer_[oddPos++] = dry + wet - wet * DSPHeaders::DSP::bipolarToUnipolar(lfo_.quadPhaseValue()) * depth;
-      }
-
+      attenuationBuffer_[index++] = dry + wet - wet * DSPHeaders::DSP::bipolarToUnipolar(lfo_.value()) * depth;
       lfo_.increment();
     }
   }
 
-  void doMIDIEvent(const AUMIDIEvent& midiEvent) noexcept {}
+  void generateModulations(AUAudioFrameCount frameCount, bool odd90) noexcept {
+    auto depth = depth_.normalized();
+    auto wet = wet_.normalized();
+    auto dry = dry_.normalized();
+    auto savedStartPhase = lfo_.phase();
+    generatePhaseModulations(0, frameCount, depth, dry, wet);
+
+    // If enabled, calculate attenuations using the out-of-phase LFO value. Properly manage LFO state so we exit with
+    // the LFO holding the same value that it currently does.
+    if (odd90 > 0) {
+      auto savedEndPhase = lfo_.phase();
+      lfo_.setPhase(savedStartPhase + 0.25);
+      generatePhaseModulations(frameCount, frameCount, depth, dry, wet);
+      lfo_.setPhase(savedEndPhase);
+    }
+  }
 
   DSPHeaders::Parameters::PercentageParameter<> depth_;
   DSPHeaders::Parameters::PercentageParameter<> dry_;

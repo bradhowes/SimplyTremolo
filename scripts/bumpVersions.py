@@ -1,25 +1,31 @@
 #!/usr/bin/env python3
 
-'''Manipulates the versionings values of an Xcode project. There are two version values that can be manipulated:
+'''
+Manipulates the versionings values of an Xcode project. There are two version
+values that can be manipulated:
 
 - the marketing version (eg. 1.2.3)
 - the project version (eg.123123)
 
-The marketing version consists of three integers: major, minor, and patch. Incrementing one resets to zero the
-ones that follow.
+The marketing version consists of three integers: major, minor, and patch.
+Incrementing one resets to zero the ones that follow.
 
-The project version can be anything, but for the App Store there can only be one build per unique project
-version. Therefore, the value used here will be the date in YYYYMMDDHHmm format.
+The project version can be anything, but for the App Store there can only be
+one build per unique project version. Therefore, the value used here will be
+ the date in YYYYMMDDHHmm format.
 
 The script edits three kinds of files:
 
-- project.pbxproj -- the project file for a collection of targets. If more than one is found (in a workspace),
+- project.pbxproj -- the project file for a collection of targets. If more than
+  one is found (in a workspace),
   then they will all be edited as long as they have the same marketing version
-- storyboard and xib -- locates any UI elements with a userLabel of "APP_VERSION" and either a text or title
-  attribute. Updates the text/title attribute to hold the marketing version prefixed with a 'v' (eg. v1.2.3)
-- Info.plist -- updates any audio unit component version values with the 32-bit version of the marketing value
+- storyboard and xib -- locates any UI elements with a userLabel of
+  "APP_VERSION" and either a text or title
+  attribute. Updates the text/title attribute to hold the marketing version
+  prefixed with a 'v' (eg. v1.2.3)
+- Info.plist -- updates any audio unit component version values with the 32-bit
+  version of the marketing value
   (major * 65536 + minor * 256 + patch). So 1.2.3 = 65051
-
 '''
 
 import argparse
@@ -29,6 +35,7 @@ import sys
 from datetime import datetime
 import subprocess
 import tempfile
+import unittest
 from typing import Callable, List, NamedTuple, NoReturn, Tuple
 
 
@@ -39,7 +46,9 @@ PathList = List[Path]
 
 
 class MarketingVersion(NamedTuple):
-    '''Holds the current immutable marketing version. Provides methods to create new values.
+    '''
+    Holds the current immutable marketing version. Provides methods to
+    create new values.
     '''
     major: int
     minor: int
@@ -90,7 +99,9 @@ def saveFile(path: Path, contents: str) -> None:
 
 
 def getAndBackupFile(path: Path) -> str:
-    '''Read the contents from a file at the given path and make a backup of the file with the extension '.old'
+    '''
+    Read the contents from a file at the given path and make a backup of the
+    file with the extension '.old'
     '''
     with open(path, 'r') as fd:
         contents = fd.read()
@@ -99,8 +110,9 @@ def getAndBackupFile(path: Path) -> str:
 
 
 def locateFiles(cond: PathPredicate) -> PathList:
-    '''Visit all files and directories in the current directory. Returns the collection of all files where the
- given `cond` returned `True`.
+    '''
+    Visit all files and directories in the current directory. Returns the
+    collection of all files where the given `cond` returned `True`.
     '''
     found = []
     for dirname, dirnames, filenames in os.walk('.'):
@@ -120,7 +132,9 @@ def locateProjectFiles() -> PathList:
 
 
 def getCurrentMarketingVersion(projectFiles: PathList) -> MarketingVersion:
-    '''Visit all project files, compare MARKETING_VERSION values to make sure they all match, and return one.
+    '''
+    Visit all project files, compare MARKETING_VERSION values to make sure
+    they all match, and return one.
     '''
     pattern = re.compile(r'MARKETING_VERSION = ([0-9]+)\.([0-9]+)\.([0-9]+)')
     version = None
@@ -247,9 +261,6 @@ if __name__ == '__main__':
 # --- Unit Tests ---
 # % python3 -m unittest bumpVersions.py
 
-import unittest
-
-
 class Tests(unittest.TestCase):
 
     def test_bumpMajor(self):
@@ -309,8 +320,13 @@ class Tests(unittest.TestCase):
         contents = 'foo text="BLAH" between userLabel="APP_VERSION" silly'
         self.assertEqual(f'foo text="v{marketingVersion}" between userLabel="APP_VERSION" silly',
                          updateUIContents(contents, marketingVersion))
-        contents = '<textFieldCell key="cell" lineBreakMode="clipping" title="v3.0.0" id="p30-Bk-a8R" userLabel="APP_VERSION">'
-        self.assertEqual(f'<textFieldCell key="cell" lineBreakMode="clipping" title="v{marketingVersion}" id="p30-Bk-a8R" userLabel="APP_VERSION">',
+        contents = '''
+        <textFieldCell key="cell" lineBreakMode="clipping" title="v3.0.0" id="p30-Bk-a8R" userLabel="APP_VERSION">
+        '''
+        self.assertEqual(f'''
+        <textFieldCell key="cell" lineBreakMode="clipping" title="v{marketingVersion}" id="p30-Bk-a8R" \
+        userLabel="APP_VERSION">
+        ''',
                          updateUIContents(contents, marketingVersion))
 
     def test_UpdateInfoFile(self):
@@ -319,29 +335,29 @@ class Tests(unittest.TestCase):
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>NSExtension</key>
-	<dict>
-		<key>NSExtensionAttributes</key>
-		<dict>
-			<key>AudioComponents</key>
-			<array>
-				<dict>
-					<key>tags</key>
-					<array>
-						<string>Effects</string>
-					</array>
-					<key>type</key>
-					<string>$(AU_COMPONENT_TYPE)</string>
-					<key>version</key>
-					<real>65538</real>
-				</dict>
-			</array>
-		</dict>
-		<key>NSExtensionPointIdentifier</key>
-		<string>com.apple.AudioUnit-UI</string>
-	</dict>
+  <key>ITSAppUsesNonExemptEncryption</key>
+  <false/>
+  <key>NSExtension</key>
+  <dict>
+    <key>NSExtensionAttributes</key>
+    <dict>
+      <key>AudioComponents</key>
+      <array>
+        <dict>
+          <key>tags</key>
+          <array>
+            <string>Effects</string>
+          </array>
+          <key>type</key>
+          <string>$(AU_COMPONENT_TYPE)</string>
+          <key>version</key>
+          <real>65538</real>
+        </dict>
+      </array>
+    </dict>
+    <key>NSExtensionPointIdentifier</key>
+    <string>com.apple.AudioUnit-UI</string>
+  </dict>
 </dict>
 </plist>
 '''

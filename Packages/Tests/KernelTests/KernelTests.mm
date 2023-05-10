@@ -95,10 +95,10 @@
   dump(ptr, frames);
 
   XCTAssertEqualWithAccuracy(ptr[0], 0.0, _epsilon);
-  XCTAssertEqualWithAccuracy(ptr[1], 0.000078176105, _epsilon);
-  XCTAssertEqualWithAccuracy(ptr[2], 0.000234375577, _epsilon);
-  XCTAssertEqualWithAccuracy(ptr[3], 0.000468445563, _epsilon);
-  XCTAssertEqualWithAccuracy(ptr[4], 0.000780233124, _epsilon);
+  XCTAssertEqualWithAccuracy(ptr[1], 0.001893336768, _epsilon);
+  XCTAssertEqualWithAccuracy(ptr[2], 0.003786653280, _epsilon);
+  XCTAssertEqualWithAccuracy(ptr[3], 0.005679947790, _epsilon);
+  XCTAssertEqualWithAccuracy(ptr[4], 0.007573218551, _epsilon);
   XCTAssertEqualWithAccuracy(ptr[frames-5], 0.951062738895, _epsilon);
   XCTAssertEqualWithAccuracy(ptr[frames-4], 0.952920973301, _epsilon);
   XCTAssertEqualWithAccuracy(ptr[frames-3], 0.954779028893, _epsilon);

@@ -1,11 +1,12 @@
 # Kernel Package
 
 This directory contains the files make up the kernel that does the actual filtering of audio samples. Most of
-the actual work is performed in classes defined in C++ header files. There is an Obj-C++
+the actual work is performed in classes defined in C++ header files. There is an Objective-C++
 [KernelBridge](include/Kernel.h) class that provides an interface that Swift can use, but it just wraps a C++
 [Kernel](C++/Kernel.hpp) class. The key is to not leak any C++ constructs into a file that might be used by Swift.
 
-- [KernelBridge](include/Kernel.h) -- provides simple interface in Obj-C for the kernel.
+- [KernelBridge](include/Kernel.h) -- provides simple interface in Obj-C for the kernel. Confusingly, this is named
+'Kernel.h' so that the KernelBridge package can import it.
 - [C++](C++/Kernel.hpp) -- the C++ header file that performs the actual sample rendering.
 
 Note that many of the include files it uses are found in the `AUv3-DSP-Headers` library that comes from the

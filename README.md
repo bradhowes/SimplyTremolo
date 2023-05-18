@@ -77,11 +77,15 @@ Each OS ([macOS](macOS) and [iOS](iOS)) have the same code layout:
 * `Extension` -- code and configuration for the extension itself. It also contains the OS-specific UI layout
   definitions, but the controller for the UI is found in
   [Shared/User Interface/FilterViewController.swift](Shared/User%20Interface/FilterViewController.swift)
-* `Framework` -- code configuration for the framework that contains the shared code
 
-The [Shared](Shared) folder holds all of the code that is used by the above products. In it you will find the
-files for the audio unit ([FilterAudioUnit](Shared/FilterAudioUnit.swift)), the user changeable parameters for
-the audio unit ([AudioUnitParameters](Shared/AudioUnitParameters.swift)), and the audio processing "kernel"
-written in C++ ([SimplyTremoloKernel](Shared/Kernel/SimplyTremoloKernel.h)).
+The common code, including the audio kernel, exists as a collection of Swift packages:
 
-There are adidtional details in the individual folders as well.
+- [Kernel](Packages/Sources/Kernel/README.md) -- contains the C++ AudioUnit kernel that renders audio samples
+- [KernelBridge](Packages/Sources/KernelBridge/README.md) -- Objective-C / Swift interface into the Kernel
+- [ParameterAddress](Packages/Sources/ParameterAddress/README.md) -- enumeration to be used for the AUParameter address 
+value. These are the runtime controls for the effect.
+- [Parameters](Packages/Sources/Parameters/README.md) -- holds the collection of AUParameter instances created from 
+ParameterAddress definitions that become the basis for the AUParameterTree of the audio unit. Also holds the colletion 
+of factory presets.
+
+The links above point to additional details about each package.

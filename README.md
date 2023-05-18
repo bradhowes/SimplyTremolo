@@ -56,9 +56,13 @@ also adjust other settings as well to properly identify you and/or your company 
 There are additional values in this file that you really should change, especially to remove any risk of
 collision with other AUv3 effects you may have on your system.
 
-The script [newRelease.sh](newRelease.sh) automates generating new archive versions of both the macOS and iOS
+The script [newRelease.sh](scripts/newRelease.sh) automates generating new archive versions of both the macOS and iOS
 apps and uploads them to the App Store if everything checks out. It uses the DEVELOPMENT_TEAM setting in the
 `Common.xcconfig` to handle the authentication and signing.
+
+The Python script [bumpVersions.py](scripts/bumpVersions.py) maniuplates the various versions attributes of the app
+that follow the semantic versioning model: major, minor, patch. There is also a "project version" that consists of a
+timestamp. The App Store demands that this version be unique for each submission.
 
 # App Targets
 
@@ -74,9 +78,8 @@ speaker. When it runs, you can play the sample file and manipulate the effects s
 Each OS ([macOS](macOS) and [iOS](iOS)) have the same code layout:
 
 * `App` -- code and configuration for the application that hosts the AUv3 app extension
-* `Extension` -- code and configuration for the extension itself. It also contains the OS-specific UI layout
-  definitions, but the controller for the UI is found in
-  [Shared/User Interface/FilterViewController.swift](Shared/User%20Interface/FilterViewController.swift)
+* `Extension` -- code and configuration for the extension itself. It also contains the OS-specific UI layout 
+definitions.
 
 The common code, including the audio kernel, exists as a collection of Swift packages:
 

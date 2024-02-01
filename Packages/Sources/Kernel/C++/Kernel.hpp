@@ -3,18 +3,19 @@
 #pragma once
 
 #import <algorithm>
+#import <iostream>
 #import <string>
 
 #import <AVFoundation/AVFoundation.h>
 #import <Accelerate/Accelerate.h>
 
-#import "DSPHeaders/BoolParameter.hpp"
 #import "DSPHeaders/BusBuffers.hpp"
 #import "DSPHeaders/DelayBuffer.hpp"
 #import "DSPHeaders/EventProcessor.hpp"
-#import "DSPHeaders/MillisecondsParameter.hpp"
 #import "DSPHeaders/LFO.hpp"
-#import "DSPHeaders/PercentageParameter.hpp"
+#import "DSPHeaders/Parameters/Bool.hpp"
+#import "DSPHeaders/Parameters/Milliseconds.hpp"
+#import "DSPHeaders/Parameters/Percentage.hpp"
 
 /**
  The audio processing kernel that generates a "flange" effect by combining an audio signal with a slightly delayed copy
@@ -33,6 +34,12 @@ struct Kernel : public DSPHeaders::EventProcessor<Kernel> {
   Kernel(std::string name) noexcept : super(), name_{name}, log_{os_log_create(name_.c_str(), "Kernel")}
   {
     lfo_.setWaveform(LFOWaveform::sinusoid);
+    registerParameter(depth_);
+    registerParameter(dry_);
+    registerParameter(wet_);
+    registerParameter(odd90_);
+    registerParameter(squareWave_);
+    registerParameter(lfo_.frequencyParameter());
   }
 
   /**
@@ -53,18 +60,7 @@ struct Kernel : public DSPHeaders::EventProcessor<Kernel> {
    @param address the address of the parameter that changed
    @param value the new value for the parameter
    */
-  void setParameterValue(AUParameterAddress address, AUValue value) noexcept {
-    setRampedParameterValue(address, value, AUAudioFrameCount(50));
-  }
-
-  /**
-   Process an AU parameter value change by updating the kernel.
-
-   @param address the address of the parameter that changed
-   @param value the new value for the parameter
-   @param duration the number of samples to adjust over
-   */
-  void setRampedParameterValue(AUParameterAddress address, AUValue value, AUAudioFrameCount duration) noexcept;
+  void setParameterValuePending(AUParameterAddress address, AUValue value) noexcept;
 
   /**
    Obtain from the kernel the current value of an AU parameter.
@@ -72,29 +68,40 @@ struct Kernel : public DSPHeaders::EventProcessor<Kernel> {
    @param address the address of the parameter to return
    @returns current parameter value
    */
-  AUValue getParameterValue(AUParameterAddress address) const noexcept;
+  AUValue getParameterValuePending(AUParameterAddress address) const noexcept;
 
+  /**
+   Process an AU parameter value change from host or external device.
+
+   @param address the address of the parameter to set
+   @param value the new value to use
+   @param duration how many samples to ramp from current to new value
+
+   @returns duration value that was used
+   */
+  AUAudioFrameCount setParameterValueRamping(AUParameterAddress address, AUValue value, AUAudioFrameCount duration) noexcept;
+
+  /**
+   Intialize the kernel with audio settings.
+
+   @param channelCount number of audio channels to expect (usually 1 or 2).
+   @param sampleRate the number of samples per second to render
+   @param maxFramesToRender the maximum number of frames to render in one shot
+   */
   void initialize(int channelCount, double sampleRate, AUAudioFrameCount maxFramesToRender) {
     lfo_.setSampleRate(sampleRate);
-    attenuationBuffer_.resize(maxFramesToRender * 2, 0.0);
+    modulations_.resize(maxFramesToRender * 2, 0.0);
   }
 
 private:
 
   void doMIDIEvent(const AUMIDIEvent& midiEvent) noexcept {}
 
-  void doParameterEvent(const AUParameterEvent& event) {
-    setRampedParameterValue(event.parameterAddress, event.value, event.rampDurationSampleFrames);
+  bool doParameterEvent(const AUParameterEvent& event, AUAudioFrameCount duration) {
+    setParameterValueRamping(event.parameterAddress, event.value, duration);
   }
 
-  void doRenderingStateChanged(bool rendering) {
-    if (!rendering) {
-      depth_.stopRamping();
-      dry_.stopRamping();
-      wet_.stopRamping();
-      lfo_.stopRamping();
-    }
-  }
+  void doRenderingStateChanged(bool rendering) {}
 
   /**
    Perform rendering of samples. Generate all modulations first and then use vDSP routine to generate samples in one
@@ -102,54 +109,62 @@ private:
    */
   void doRendering(NSInteger outputBusNumber, DSPHeaders::BusBuffers ins, DSPHeaders::BusBuffers outs,
                    AUAudioFrameCount frameCount) noexcept {
-    bool odd90 = odd90_.get();
-    vDSP_Stride stride{1};
-    generateModulations(frameCount, odd90);
-    for (int channel = 0; channel < ins.size(); ++channel) {
-      auto& input = ins[channel];
-      auto& output = outs[channel];
-      // Attenuations for 'odd' channels when enabled are in the second half of the attenuation buffer.
-      AUValue* attenuation = (odd90 && (channel & 1)) ? &(attenuationBuffer_[frameCount]) : &(attenuationBuffer_[0]);
-      // Do vector multiply of the attenuation and the input samples. Store in the output buffer.
-      vDSP_vmul(attenuation, stride, input, stride, output, stride, vDSP_Length(frameCount));
-    }
-  }
+    if (frameCount == 1) [[unlikely]] {
 
-  void generatePhaseModulations(AUAudioFrameCount index, AUAudioFrameCount frameCount, AUValue depth, AUValue dry,
-                                AUValue wet) noexcept {
-    while (frameCount-- > 0) {
-      // LFO ranges from [-1.0, +1] (bipolar). Convert to unipolar and multiply by depth to get a scaled
-      // attenuation value. We subtract that value from 1.0 so that at small depth values there is not much
-      // attenuation, but at higher values the affect on the amplitude becomes much more pronounced.
-      //
-      attenuationBuffer_[index++] = dry + wet - wet * DSPHeaders::DSP::bipolarToUnipolar(lfo_.value()) * depth;
+      // Ramping case
+
+      auto depth = depth_.frameValue();
+      auto wet = wet_.frameValue();
+      auto dry = dry_.frameValue();
+
+      auto even = lfo_.value();
+      auto odd = odd90_ ? lfo_.quadPhaseValue() : even;
       lfo_.increment();
+
+      for (auto channel = 0; channel < ins.size(); ++channel) {
+        *outs[channel]++ = filter(*ins[channel]++, depth, wet, dry, channel & 1 ? odd : even);
+      }
+    } else [[likely]] {
+      auto depth = depth_.get();
+      auto wet = wet_.get();
+      auto dry = dry_.get();
+
+      for (auto index  = 0; index < frameCount; ++index) {
+        modulations_[index] = modulation(depth, wet, dry, lfo_.value());
+        modulations_[index + frameCount] = modulation(depth, wet, dry, lfo_.quadPhaseValue());
+        lfo_.increment();
+      }
+
+      auto evens = &modulations_[0];
+      auto odds = &modulations_[frameCount];
+
+      vDSP_Stride stride{1};
+      for (int channel = 0; channel < ins.size(); ++channel) {
+        auto& input = ins[channel];
+        auto& output = outs[channel];
+        auto modulations = (odd90_ && (channel & 1)) ? odds : evens;
+        // Do vector multiply of the attenuation and the input samples. Store in the output buffer.
+        vDSP_vmul(modulations, stride, input, stride, output, stride, vDSP_Length(frameCount));
+        ins[channel] += frameCount;
+        outs[channel] += frameCount;
+      }
     }
   }
 
-  void generateModulations(AUAudioFrameCount frameCount, bool odd90) noexcept {
-    auto depth = depth_.normalized();
-    auto wet = wet_.normalized();
-    auto dry = dry_.normalized();
-    auto savedStartPhase = lfo_.phase();
-    generatePhaseModulations(0, frameCount, depth, dry, wet);
-
-    // If enabled, calculate attenuations using the out-of-phase LFO value. Properly manage LFO state so we exit with
-    // the LFO holding the same value that it currently does.
-    if (odd90 > 0) {
-      auto savedEndPhase = lfo_.phase();
-      lfo_.setPhase(savedStartPhase + 0.25);
-      generatePhaseModulations(frameCount, frameCount, depth, dry, wet);
-      lfo_.setPhase(savedEndPhase);
-    }
+  static AUValue modulation(AUValue depth, AUValue wet, AUValue dry, AUValue lfo) {
+    return (dry + wet * depth * (1.0 - DSPHeaders::DSP::bipolarToUnipolar(lfo))) / 2.0;
   }
 
-  DSPHeaders::Parameters::PercentageParameter<> depth_;
-  DSPHeaders::Parameters::PercentageParameter<> dry_;
-  DSPHeaders::Parameters::PercentageParameter<> wet_;
-  DSPHeaders::Parameters::BoolParameter<> squareWave_;
-  DSPHeaders::Parameters::BoolParameter<> odd90_;
-  std::vector<AUValue> attenuationBuffer_;
+  static AUValue filter(AUValue sample, AUValue depth, AUValue wet, AUValue dry, AUValue lfo) {
+    return sample * modulation(depth, wet, dry, lfo);
+  }
+
+  DSPHeaders::Parameters::Percentage depth_;
+  DSPHeaders::Parameters::Percentage dry_;
+  DSPHeaders::Parameters::Percentage wet_;
+  DSPHeaders::Parameters::Bool squareWave_;
+  DSPHeaders::Parameters::Bool odd90_;
+  std::vector<AUValue> modulations_;
   DSPHeaders::LFO<AUValue> lfo_;
   std::string name_;
   os_log_t log_;

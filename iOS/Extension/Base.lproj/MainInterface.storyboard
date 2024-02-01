@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,7 +17,7 @@
         <!--FilterViewController-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" userLabel="FilterViewController" customClass="ViewController" customModule="SimplyTremoloAU" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" userLabel="FilterViewController" customClass="ViewController" customModule="SimplyTremoloAU" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -29,7 +29,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v3.1.0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pb8-H3-AaS" userLabel="APP_VERSION">
-                                <rect key="frame" x="383.5" y="384.5" width="39.5" height="18"/>
+                                <rect key="frame" x="383" y="384.5" width="40" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" name="Title"/>
                                 <nil key="highlightedColor"/>
@@ -282,27 +282,27 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="controlsView" destination="TmF-jU-cgw" id="QVB-F4-Cad"/>
-                        <outlet property="depthControl" destination="hF3-lq-xlE" id="gIH-1s-Vmb"/>
-                        <outlet property="depthTapEdit" destination="8ki-wy-l3o" id="fq6-nR-D3p"/>
-                        <outlet property="depthValueLabel" destination="GCP-HR-UOg" id="Lu3-Vi-STS"/>
-                        <outlet property="dryMixControl" destination="Jzc-6g-Fgq" id="6OF-Jo-DC7"/>
-                        <outlet property="dryMixTapEdit" destination="rYA-kZ-hpS" id="VTd-IF-HLW"/>
-                        <outlet property="dryMixValueLabel" destination="N2N-20-gAu" id="OA7-s0-xbI"/>
-                        <outlet property="editingBackground" destination="gry-aw-80i" id="H86-JI-xTx"/>
-                        <outlet property="editingBackgroundBottomConstraint" destination="Ajk-Wf-8nT" id="ir7-nc-cbf"/>
-                        <outlet property="editingContainerView" destination="uNx-0G-OWZ" id="hKZ-NA-Ko8"/>
-                        <outlet property="editingLabel" destination="0gm-sU-zom" id="1v8-x3-fGB"/>
-                        <outlet property="editingValue" destination="5xm-4x-x9O" id="f2E-sI-sSb"/>
-                        <outlet property="editingViewTopConstraint" destination="sHm-Sp-MHW" id="4tA-Ad-0gm"/>
-                        <outlet property="odd90Switch" destination="FUB-33-WqX" id="fva-24-0ml"/>
-                        <outlet property="rateControl" destination="hui-tD-xRO" id="C4v-AU-nWf"/>
-                        <outlet property="rateTapEdit" destination="mHo-9f-pLo" id="O0b-qU-dgM"/>
-                        <outlet property="rateValueLabel" destination="T5c-Sd-KDy" id="h5Y-4h-sE4"/>
-                        <outlet property="squareWaveformSwitch" destination="0YT-2Y-LgY" id="J5w-0X-zRp"/>
-                        <outlet property="wetMixControl" destination="xjB-dE-KcA" id="PDF-Uv-w5s"/>
-                        <outlet property="wetMixTapEdit" destination="lM5-yt-nYm" id="MB3-Fk-1UJ"/>
-                        <outlet property="wetMixValueLabel" destination="OFy-GK-jEJ" id="FO3-mb-HXr"/>
+                        <outlet property="controlsView" destination="TmF-jU-cgw" id="Yzc-1u-N8u"/>
+                        <outlet property="depthControl" destination="hF3-lq-xlE" id="VgC-La-fCg"/>
+                        <outlet property="depthTapEdit" destination="8ki-wy-l3o" id="ugy-Fh-W1O"/>
+                        <outlet property="depthValueLabel" destination="GCP-HR-UOg" id="6YG-Ly-Ixf"/>
+                        <outlet property="dryMixControl" destination="Jzc-6g-Fgq" id="8kx-jD-6fL"/>
+                        <outlet property="dryMixTapEdit" destination="rYA-kZ-hpS" id="Kso-Sb-9hA"/>
+                        <outlet property="dryMixValueLabel" destination="N2N-20-gAu" id="hhf-Mk-IvB"/>
+                        <outlet property="editingBackground" destination="gry-aw-80i" id="3O5-0s-IU6"/>
+                        <outlet property="editingBackgroundBottomConstraint" destination="Ajk-Wf-8nT" id="aIi-0P-6Iu"/>
+                        <outlet property="editingContainerView" destination="uNx-0G-OWZ" id="reE-TI-oME"/>
+                        <outlet property="editingLabel" destination="0gm-sU-zom" id="10H-qT-PIh"/>
+                        <outlet property="editingValue" destination="5xm-4x-x9O" id="H8e-Xt-VHf"/>
+                        <outlet property="editingViewTopConstraint" destination="sHm-Sp-MHW" id="NoR-wl-wdb"/>
+                        <outlet property="odd90Switch" destination="FUB-33-WqX" id="tgG-7r-49M"/>
+                        <outlet property="rateControl" destination="hui-tD-xRO" id="VXR-Cz-HQ2"/>
+                        <outlet property="rateTapEdit" destination="mHo-9f-pLo" id="BRb-gM-wgq"/>
+                        <outlet property="rateValueLabel" destination="T5c-Sd-KDy" id="3MR-fU-SFn"/>
+                        <outlet property="squareWaveformSwitch" destination="0YT-2Y-LgY" id="8Kd-Px-fu7"/>
+                        <outlet property="wetMixControl" destination="xjB-dE-KcA" id="4HN-1T-lPm"/>
+                        <outlet property="wetMixTapEdit" destination="lM5-yt-nYm" id="gfQ-gm-HUF"/>
+                        <outlet property="wetMixValueLabel" destination="OFy-GK-jEJ" id="AOc-V1-fgs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

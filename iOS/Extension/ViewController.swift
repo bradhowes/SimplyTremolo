@@ -14,7 +14,7 @@ extension Knob: AUParameterValueProvider, RangedControl {}
 /**
  Controller for the AUv3 filter view. Handles wiring up of the controls with AUParameter settings.
  */
-@objc open class ViewController: AUViewController {
+@objc open class ViewController : AUViewController {
 
   // NOTE: this special form sets the subsystem name and must run before any other logger calls.
   private let log = Shared.logger(Bundle.main.auBaseName + "AU", "ViewController")

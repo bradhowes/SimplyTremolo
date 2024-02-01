@@ -15,7 +15,7 @@
 	<key>AU_COMPONENT_TYPE</key>
 	<string>$(AU_COMPONENT_TYPE)</string>
 	<key>AU_FACTORY_FUNCTION</key>
-	<string>$(AU_FACTORY_FUNCTION)</string>
+	<string>$(AU_FACTORY_FUNCTION_MACOS)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

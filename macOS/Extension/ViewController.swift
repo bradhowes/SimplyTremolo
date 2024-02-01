@@ -17,7 +17,7 @@ extension Knob: AUParameterValueProvider, RangedControl {}
 @objc open class ViewController: AUViewController {
 
   // NOTE: this special form sets the subsystem name and must run before any other logger calls.
-  private let log: OSLog = Shared.logger(Bundle.main.auBaseName + "AU", "ViewController")
+  private let log: OSLog = Shared.logger(Bundle.main.auBaseName + "AU", "ViewController_macOS")
 
   private let parameters = Parameters()
   private var viewConfig: AUAudioUnitViewConfiguration!
@@ -30,11 +30,11 @@ extension Knob: AUParameterValueProvider, RangedControl {}
   @IBOutlet private weak var depthControl: Knob!
   @IBOutlet private weak var depthValueLabel: FocusAwareTextField!
 
-  @IBOutlet private weak var wetControl: Knob!
-  @IBOutlet private weak var wetValueLabel: FocusAwareTextField!
-
   @IBOutlet private weak var dryControl: Knob!
   @IBOutlet private weak var dryValueLabel: FocusAwareTextField!
+
+  @IBOutlet private weak var wetControl: Knob!
+  @IBOutlet private weak var wetValueLabel: FocusAwareTextField!
 
   @IBOutlet private weak var squareWaveControl: NSSwitch!
   @IBOutlet private weak var odd90Control: NSSwitch!
@@ -42,8 +42,8 @@ extension Knob: AUParameterValueProvider, RangedControl {}
   private lazy var controls: [ParameterAddress: (Knob, FocusAwareTextField)] = [
     .rate: (rateControl, rateValueLabel),
     .depth: (depthControl, depthValueLabel),
-    .wet: (wetControl, wetValueLabel),
-    .dry: (dryControl, dryValueLabel)
+    .dry: (dryControl, dryValueLabel),
+    .wet: (wetControl, wetValueLabel)
   ]
 
   private lazy var switches: [ParameterAddress: NSSwitch] = [

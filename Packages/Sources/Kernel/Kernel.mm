@@ -4,31 +4,43 @@
 
 @import ParameterAddress;
 
-void Kernel::setParameterValuePending(AUParameterAddress address, AUValue value) noexcept {
+bool Kernel::doSetImmediateParameterValue(AUParameterAddress address, AUValue value, AUAudioFrameCount duration) noexcept {
   switch (address) {
-    case ParameterAddressRate: lfo_.setFrequencyPending(value); break;
-    case ParameterAddressDepth: depth_.setPending(value); break;
-    case ParameterAddressDry: dry_.setPending(value); break;
-    case ParameterAddressWet: wet_.setPending(value); break;
-    case ParameterAddressSquareWave: lfo_.setWaveform(value ? LFOWaveform::square : LFOWaveform::sinusoid); break;
-    case ParameterAddressOdd90: odd90_.set(value, 0); break;
+    case ParameterAddressRate: lfo_.setFrequency(value, duration); return true;
+    case ParameterAddressDepth: depth_.setImmediate(value, duration); return true;
+    case ParameterAddressDry: dry_.setImmediate(value, duration); return true;
+    case ParameterAddressWet: wet_.setImmediate(value, duration); return true;
+    case ParameterAddressSquareWave: lfo_.setWaveform(value ? LFOWaveform::square : LFOWaveform::sinusoid); return true;
+    case ParameterAddressOdd90: odd90_.setImmediate(value, duration); return false;
   }
+  return false;
 }
 
-AUAudioFrameCount Kernel::setParameterValueRamping(AUParameterAddress address, AUValue value, AUAudioFrameCount duration) noexcept {
-  os_log_with_type(log_, OS_LOG_TYPE_DEBUG, "setParameterValueRamping - %llul %f %d", address, value, duration);
+bool Kernel::doSetPendingParameterValue(AUParameterAddress address, AUValue value) noexcept {
   switch (address) {
-    case ParameterAddressRate: lfo_.setFrequency(value, duration); return duration;
-    case ParameterAddressDepth: depth_.set(value, duration); return duration;
-    case ParameterAddressDry: dry_.set(value, duration); return duration;
-    case ParameterAddressWet: wet_.set(value, duration); return duration;
-    case ParameterAddressSquareWave: lfo_.setWaveform(value ? LFOWaveform::square : LFOWaveform::sinusoid); return 0;
-    case ParameterAddressOdd90: odd90_.set(value, 0); return 0;
+    case ParameterAddressRate: lfo_.setFrequencyPending(value); return true;
+    case ParameterAddressDepth: depth_.setPending(value); return true;
+    case ParameterAddressDry: dry_.setPending(value); return true;
+    case ParameterAddressWet: wet_.setPending(value); return true;
+    case ParameterAddressSquareWave: lfo_.setWaveform(value ? LFOWaveform::square : LFOWaveform::sinusoid); return true;
+    case ParameterAddressOdd90: odd90_.setPending(value); return true;
   }
-  return 0;
+  return false;
 }
 
-AUValue Kernel::getParameterValuePending(AUParameterAddress address) const noexcept {
+AUValue Kernel::doGetImmediateParameterValue(AUParameterAddress address) const noexcept {
+  switch (address) {
+    case ParameterAddressRate: return lfo_.frequency();
+    case ParameterAddressDepth: return depth_.getImmediate();
+    case ParameterAddressDry: return dry_.getImmediate();
+    case ParameterAddressWet: return wet_.getImmediate();
+    case ParameterAddressSquareWave: return lfo_.waveform() == LFOWaveform::square ? 1.0 : 0.0;
+    case ParameterAddressOdd90: return odd90_.getImmediate();
+  }
+  return 0.0;
+}
+
+AUValue Kernel::doGetPendingParameterValue(AUParameterAddress address) const noexcept {
   switch (address) {
     case ParameterAddressRate: return lfo_.frequencyPending();
     case ParameterAddressDepth: return depth_.getPending();

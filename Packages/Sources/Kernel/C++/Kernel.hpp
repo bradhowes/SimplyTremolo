@@ -54,32 +54,7 @@ struct Kernel : public DSPHeaders::EventProcessor<Kernel> {
     initialize(format.channelCount, format.sampleRate, maxFramesToRender);
   }
 
-  /**
-   Process an AU parameter value change by updating the kernel.
-
-   @param address the address of the parameter that changed
-   @param value the new value for the parameter
-   */
-  void setParameterValuePending(AUParameterAddress address, AUValue value) noexcept;
-
-  /**
-   Obtain from the kernel the current value of an AU parameter.
-
-   @param address the address of the parameter to return
-   @returns current parameter value
-   */
-  AUValue getParameterValuePending(AUParameterAddress address) const noexcept;
-
-  /**
-   Process an AU parameter value change from host or external device.
-
-   @param address the address of the parameter to set
-   @param value the new value to use
-   @param duration how many samples to ramp from current to new value
-
-   @returns duration value that was used
-   */
-  AUAudioFrameCount setParameterValueRamping(AUParameterAddress address, AUValue value, AUAudioFrameCount duration) noexcept;
+private:
 
   /**
    Intialize the kernel with audio settings.
@@ -93,15 +68,40 @@ struct Kernel : public DSPHeaders::EventProcessor<Kernel> {
     modulations_.resize(maxFramesToRender * 2, 0.0);
   }
 
-private:
+  /**
+   Set a paramete value from within the render loop.
 
-  void doMIDIEvent(const AUMIDIEvent& midiEvent) noexcept {}
+   @param address the parameter to change
+   @param value the new value to use
+   @param duration the ramping duration to transition to the new value
+   */
+  bool doSetImmediateParameterValue(AUParameterAddress address, AUValue value, AUAudioFrameCount duration) noexcept;
 
-  bool doParameterEvent(const AUParameterEvent& event, AUAudioFrameCount duration) {
-    setParameterValueRamping(event.parameterAddress, event.value, duration);
-  }
+  /**
+   Set a paramete value from the UI via the parameter tree. Will be recognized and handled in the next render pass.
 
-  void doRenderingStateChanged(bool rendering) {}
+   @param address the parameter to change
+   @param value the new value to use
+   */
+  bool doSetPendingParameterValue(AUParameterAddress address, AUValue value) noexcept;
+
+  /**
+   Get the paramete value last set in the render thread. NOTE: this does not account for any ramping that might be in
+   effect.
+
+   @param address the parameter to access
+   @returns parameter value
+   */
+  AUValue doGetImmediateParameterValue(AUParameterAddress address) const noexcept;
+
+  /**
+   Get the paramete value last set by the UI / parameter tree. NOTE: this does not account for any ramping that might
+   be in effect.
+
+   @param address the parameter to access
+   @returns parameter value
+   */
+  AUValue doGetPendingParameterValue(AUParameterAddress address) const noexcept;
 
   /**
    Perform rendering of samples. Generate all modulations first and then use vDSP routine to generate samples in one
@@ -125,9 +125,9 @@ private:
         *outs[channel]++ = filter(*ins[channel]++, depth, wet, dry, channel & 1 ? odd : even);
       }
     } else [[likely]] {
-      auto depth = depth_.get();
-      auto wet = wet_.get();
-      auto dry = dry_.get();
+      auto depth = depth_.frameValue();
+      auto wet = wet_.frameValue();
+      auto dry = dry_.frameValue();
 
       for (auto index  = 0; index < frameCount; ++index) {
         modulations_[index] = modulation(depth, wet, dry, lfo_.value());

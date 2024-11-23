@@ -97,7 +97,7 @@ extension Parameters {
   }
 }
 
-extension AUParameter: AUParameterFormatting {
+extension AUParameter: @retroactive AUParameterFormatting {
 
   /// Obtain string to use to separate a formatted value from its units name
   public var unitSeparator: String { parameterAddress == .rate || parameterAddress == .depth ? " " : "" }

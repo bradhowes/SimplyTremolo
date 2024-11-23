@@ -9,7 +9,7 @@ import ParameterAddress
 import Parameters
 import os.log
 
-extension Knob: AUParameterValueProvider, RangedControl {}
+extension Knob: @retroactive AUParameterValueProvider, @retroactive RangedControl {}
 
 /**
  Controller for the AUv3 filter view. Handles wiring up of the controls with AUParameter settings.
@@ -21,6 +21,7 @@ extension Knob: AUParameterValueProvider, RangedControl {}
 
   private let parameters = Parameters()
   private var viewConfig: AUAudioUnitViewConfiguration!
+  private var versionTagValue: String = ""
 
   @IBOutlet private weak var controlsView: NSView!
 
@@ -38,6 +39,8 @@ extension Knob: AUParameterValueProvider, RangedControl {}
 
   @IBOutlet private weak var squareWaveControl: NSSwitch!
   @IBOutlet private weak var odd90Control: NSSwitch!
+
+  @IBOutlet private weak var versionTag: NSTextField!
 
   private lazy var controls: [ParameterAddress: (Knob, FocusAwareTextField)] = [
     .rate: (rateControl, rateValueLabel),
@@ -90,13 +93,19 @@ extension ViewController: AudioUnitViewConfigurationManager {}
 
 // MARK: - AUAudioUnitFactory
 
-extension ViewController: AUAudioUnitFactory {
+extension ViewController: @preconcurrency AUAudioUnitFactory {
   @objc public func createAudioUnit(with componentDescription: AudioComponentDescription) throws -> AUAudioUnit {
+    let bundle = InternalConstants.bundle
+
     let kernel = KernelBridge(Bundle.main.auBaseName)
-    let audioUnit = try FilterAudioUnitFactory.create(componentDescription: componentDescription,
-                                                      parameters: parameters,
-                                                      kernel: kernel,
-                                                      viewConfigurationManager: self)
+    let audioUnit = try FilterAudioUnitFactory.create(
+      componentDescription: componentDescription,
+      parameters: parameters,
+      kernel: kernel,
+      viewConfigurationManager: self
+    )
+
+    self.versionTagValue = bundle.versionTag
     self.audioUnit = audioUnit
     return audioUnit
   }
@@ -117,7 +126,7 @@ private extension ViewController {
   func createEditors() {
     os_log(.info, log: log, "createEditors BEGIN")
 
-    let knobColor = NSColor(named: "knob")!
+    let knobColor = NSColor.knobProgress
 
     for (parameterAddress, (knob, label)) in controls {
       knob.progressColor = knobColor
@@ -180,4 +189,9 @@ private extension ViewController {
 
     editor.controlChanged(source: control)
   }
+}
+
+private enum InternalConstants {
+  private class EmptyClass {}
+  static let bundle = Bundle(for: InternalConstants.EmptyClass.self)
 }

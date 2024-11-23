@@ -9,7 +9,7 @@ import ParameterAddress
 import Parameters
 import os.log
 
-extension Knob: AUParameterValueProvider, RangedControl {}
+extension Knob: @retroactive AUParameterValueProvider, @retroactive RangedControl {}
 
 /**
  Controller for the AUv3 filter view. Handles wiring up of the controls with AUParameter settings.
@@ -20,12 +20,7 @@ extension Knob: AUParameterValueProvider, RangedControl {}
   private let log = Shared.logger(Bundle.main.auBaseName + "AU", "ViewController")
 
   private let parameters = Parameters()
-  private let kernel = KernelBridge(Bundle.main.auBaseName)
   private var viewConfig: AUAudioUnitViewConfiguration!
-
-  private let logSliderMinValue: Float = 0.0
-  private let logSliderMaxValue: Float = 9.0
-  private lazy var logSliderMaxValuePower2Minus1 = Float(pow(2, logSliderMaxValue) - 1)
 
   @IBOutlet weak var controlsView: View!
 
@@ -47,6 +42,8 @@ extension Knob: AUParameterValueProvider, RangedControl {}
 
   @IBOutlet weak var squareWaveformSwitch: Switch!
   @IBOutlet weak var odd90Switch: Switch!
+
+  @IBOutlet weak var versionTag: UILabel!
 
   private lazy var controls: [ParameterAddress: (Knob, Label, UIView)] = [
     .rate: (rateControl, rateValueLabel, rateTapEdit),
@@ -107,7 +104,7 @@ extension ViewController: AudioUnitViewConfigurationManager {}
 
 // MARK: - AUAudioUnitFactory
 
-extension ViewController: AUAudioUnitFactory {
+extension ViewController: @preconcurrency AUAudioUnitFactory {
   @objc public func createAudioUnit(with componentDescription: AudioComponentDescription) throws -> AUAudioUnit {
     let kernel = KernelBridge(Bundle.main.auBaseName)
     let audioUnit = try FilterAudioUnitFactory.create(componentDescription: componentDescription,
@@ -130,8 +127,13 @@ extension ViewController {
 
   private func createEditors() {
     os_log(.info, log: log, "createEditors BEGIN")
+    let bundle = InternalConstants.bundle
 
-    let knobColor = UIColor(named: "knob")!
+    DispatchQueue.main.async {
+      self.versionTag.text = bundle.versionTag
+    }
+
+    let knobColor = UIColor.knobProgress
 
     let valueEditor = ValueEditor(containerView: editingContainerView, backgroundView: editingBackground,
                                   parameterName: editingLabel, parameterValue: editingValue,
@@ -199,4 +201,9 @@ extension ViewController {
 
     editor.controlChanged(source: control)
   }
+}
+
+private enum InternalConstants {
+  private class EmptyClass {}
+  static let bundle = Bundle(for: InternalConstants.EmptyClass.self)
 }

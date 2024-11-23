@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -25,13 +25,13 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tremolo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Nj-pL-t9n">
                                 <rect key="frame" x="-48" y="264.5" width="471" height="138"/>
                                 <fontDescription key="fontDescription" name="Desdemona" family="Desdemona" pointSize="120"/>
-                                <color key="textColor" name="title"/>
+                                <color key="textColor" name="backgroundTitleColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v3.1.0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pb8-H3-AaS" userLabel="APP_VERSION">
                                 <rect key="frame" x="383" y="384.5" width="40" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" name="Title"/>
+                                <color key="textColor" name="backgroundTitleColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="TmF-jU-cgw" userLabel="Controls">
@@ -55,7 +55,7 @@
                                                         <rect key="frame" x="0.0" y="112" width="120" height="24"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="0"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="knobLabelColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mHo-9f-pLo" userLabel="TapEdit">
@@ -91,7 +91,7 @@
                                                         <rect key="frame" x="0.0" y="112" width="120" height="24"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="1"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="knobLabelColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ki-wy-l3o" userLabel="TapEdit">
@@ -128,7 +128,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Square" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OYh-Dz-pDj" userLabel="Square Wave">
                                                         <rect key="frame" x="18.5" y="40" width="43" height="16"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="knobLabelColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -148,7 +148,7 @@
                                                         <rect key="frame" x="29.5" y="72" width="21.5" height="16"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="4"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="knobLabelColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rYA-kZ-hpS" userLabel="Dry Tap">
@@ -183,7 +183,7 @@
                                                         <rect key="frame" x="28" y="72" width="24" height="16"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="knobLabelColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lM5-yt-nYm" userLabel="Wet Tap">
@@ -214,7 +214,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Odd 90°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2aT-Gu-trr">
                                                         <rect key="frame" x="14" y="40" width="52" height="16"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <color key="textColor" name="Labels"/>
+                                                        <color key="textColor" name="knobLabelColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -232,7 +232,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gm-sU-zom">
                                                 <rect key="frame" x="16" y="23" width="41.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" name="Labels"/>
+                                                <color key="textColor" name="knobLabelColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="100.00" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="5xm-4x-x9O">
@@ -241,7 +241,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="160" id="dPh-GW-1UK"/>
                                                 </constraints>
-                                                <color key="textColor" name="Labels"/>
+                                                <color key="textColor" name="knobLabelColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" keyboardAppearance="alert" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                             </textField>
@@ -298,6 +298,7 @@
                         <outlet property="odd90Switch" destination="FUB-33-WqX" id="tgG-7r-49M"/>
                         <outlet property="rateControl" destination="hui-tD-xRO" id="VXR-Cz-HQ2"/>
                         <outlet property="rateTapEdit" destination="mHo-9f-pLo" id="BRb-gM-wgq"/>
+                        <outlet property="versionTag" destination="Pb8-H3-AaS" id="8Kd-Px-fu8"/>
                         <outlet property="rateValueLabel" destination="T5c-Sd-KDy" id="3MR-fU-SFn"/>
                         <outlet property="squareWaveformSwitch" destination="0YT-2Y-LgY" id="8Kd-Px-fu7"/>
                         <outlet property="wetMixControl" destination="xjB-dE-KcA" id="4HN-1T-lPm"/>
@@ -317,11 +318,11 @@
         <namedColor name="Progress">
             <color red="0.41999998688697815" green="0.0" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="Title">
-            <color red="0.41999998688697815" green="0.0" blue="1" alpha="0.34999999403953552" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="title">
+        <namedColor name="backgroundTitleColor">
             <color red="0.41999998688697815" green="0.0" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="knobLabelColor">
+            <color red="0.69800001382827759" green="0.47999998927116394" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

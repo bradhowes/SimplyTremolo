@@ -17,6 +17,8 @@
 #import "DSPHeaders/Parameters/Milliseconds.hpp"
 #import "DSPHeaders/Parameters/Percentage.hpp"
 
+@import ParameterAddress;
+
 /**
  The audio processing kernel that generates a "flange" effect by combining an audio signal with a slightly delayed copy
  of itself. The delay value oscillates at a defined frequency which causes the delayed audio to vary in pitch due to it
@@ -33,13 +35,7 @@ struct Kernel : public DSPHeaders::EventProcessor<Kernel> {
    */
   Kernel(std::string name) noexcept : super(), name_{name}, log_{os_log_create(name_.c_str(), "Kernel")}
   {
-    lfo_.setWaveform(LFOWaveform::sinusoid);
-    registerParameter(depth_);
-    registerParameter(dry_);
-    registerParameter(wet_);
-    registerParameter(odd90_);
-    registerParameter(squareWave_);
-    registerParameter(lfo_.frequencyParameter());
+    registerParameters({rate_, depth_, dry_, wet_, odd90_, squareWave_});
   }
 
   /**
@@ -64,44 +60,10 @@ private:
    @param maxFramesToRender the maximum number of frames to render in one shot
    */
   void initialize(int channelCount, double sampleRate, AUAudioFrameCount maxFramesToRender) {
+    lfo_.setWaveform(LFOWaveform::sinusoid);
     lfo_.setSampleRate(sampleRate);
     modulations_.resize(maxFramesToRender * 2, 0.0);
   }
-
-  /**
-   Set a paramete value from within the render loop.
-
-   @param address the parameter to change
-   @param value the new value to use
-   @param duration the ramping duration to transition to the new value
-   */
-  bool doSetImmediateParameterValue(AUParameterAddress address, AUValue value, AUAudioFrameCount duration) noexcept;
-
-  /**
-   Set a paramete value from the UI via the parameter tree. Will be recognized and handled in the next render pass.
-
-   @param address the parameter to change
-   @param value the new value to use
-   */
-  bool doSetPendingParameterValue(AUParameterAddress address, AUValue value) noexcept;
-
-  /**
-   Get the paramete value last set in the render thread. NOTE: this does not account for any ramping that might be in
-   effect.
-
-   @param address the parameter to access
-   @returns parameter value
-   */
-  AUValue doGetImmediateParameterValue(AUParameterAddress address) const noexcept;
-
-  /**
-   Get the paramete value last set by the UI / parameter tree. NOTE: this does not account for any ramping that might
-   be in effect.
-
-   @param address the parameter to access
-   @returns parameter value
-   */
-  AUValue doGetPendingParameterValue(AUParameterAddress address) const noexcept;
 
   /**
    Perform rendering of samples. Generate all modulations first and then use vDSP routine to generate samples in one
@@ -159,13 +121,14 @@ private:
     return sample * modulation(depth, wet, dry, lfo);
   }
 
-  DSPHeaders::Parameters::Percentage depth_;
-  DSPHeaders::Parameters::Percentage dry_;
-  DSPHeaders::Parameters::Percentage wet_;
-  DSPHeaders::Parameters::Bool squareWave_;
-  DSPHeaders::Parameters::Bool odd90_;
+  DSPHeaders::Parameters::Float rate_{ParameterAddressRate};
+  DSPHeaders::Parameters::Percentage depth_{ParameterAddressDepth};
+  DSPHeaders::Parameters::Percentage dry_{ParameterAddressDry};
+  DSPHeaders::Parameters::Percentage wet_{ParameterAddressWet};
+  DSPHeaders::Parameters::Bool squareWave_{ParameterAddressSquareWave};
+  DSPHeaders::Parameters::Bool odd90_{ParameterAddressOdd90};
+  DSPHeaders::LFO<AUValue> lfo_{rate_};
   std::vector<AUValue> modulations_;
-  DSPHeaders::LFO<AUValue> lfo_;
   std::string name_;
   os_log_t log_;
 };

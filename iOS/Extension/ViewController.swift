@@ -40,8 +40,6 @@ import os.log
   @IBOutlet weak var squareWaveformSwitch: Switch!
   @IBOutlet weak var odd90Switch: Switch!
 
-  @IBOutlet weak var versionTag: UILabel!
-
   private lazy var controls: [ParameterAddress: (Knob, Label, UIView)] = [
     .rate: (rateControl, rateValueLabel, rateTapEdit),
     .depth: (depthControl, depthValueLabel, depthTapEdit),
@@ -128,15 +126,12 @@ extension ViewController {
 
   private func createEditors() {
     os_log(.info, log: log, "createEditors BEGIN")
-    let bundle = InternalConstants.bundle
 
     guard let audioUnit,
           let parameterTree = audioUnit.parameterTree
     else {
       return
     }
-
-    self.versionTag.text = bundle.versionTag
 
     let knobColor = UIColor.knobProgress
 

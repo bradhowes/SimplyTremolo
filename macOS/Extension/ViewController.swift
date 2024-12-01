@@ -95,6 +95,7 @@ extension ViewController: AudioUnitViewConfigurationManager {}
 // MARK: - AUAudioUnitFactory
 
 extension ViewController: AUAudioUnitFactory {
+
   nonisolated public func createAudioUnit(with componentDescription: AudioComponentDescription) throws -> AUAudioUnit {
     try DispatchQueue.main.sync {
       let bundle = InternalConstants.bundle

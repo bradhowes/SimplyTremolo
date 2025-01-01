@@ -1396,7 +1396,7 @@
 			repositoryURL = "https://github.com/bradhowes/AUv3Support";
 			requirement = {
 				kind = exactVersion;
-				version = 16.1.0;
+				version = 16.1.1;
 			};
 		};
 		BDAB6D5D2CF1701700E81798 /* XCRemoteSwiftPackageReference "knob" */ = {

@@ -25,11 +25,14 @@ AU_COMPONENT_MANUFACTURER = BRay
 // protocol.
 AU_FACTORY_FUNCTION = SimplyTremoloAU.ViewController
 
+// Copyright notice to put in the Info.plist files
+COPYRIGHT_NOTICE = Copyright © 2026 B-Ray Software
+
 // The "build" version -- the `bumpVersions.py -b` option sets this to a date/time stamp
-CURRENT_PROJECT_VERSION = 20241122214537
+CURRENT_PROJECT_VERSION = 20260227085026
 
 // The visible version (eg. 1.2.3)
-MARKETING_VERSION = 3.4.3
+MARKETING_VERSION = 3.6.1
 
 // The bundle ID prefix to use for the app host and app extension.
 APP_BUNDLE_IDENTIFIER_PREFIX = com.braysoftware
